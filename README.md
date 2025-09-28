@@ -1,1 +1,1 @@
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fyour-username)](https://hits.seeyoufarm.com)
+[![Hits](https://hits.sh/joowan1108.github.io.svg?style=for-the-badge&color=1c20cd)](https://hits.sh/joowan1108.github.io/)
