@@ -27,8 +27,11 @@ Character-level language modeling의 주된 어려움은 다음과 같다.
 이 논문에서는 기존에 Character-level language modeling에 사용되는 RNN 구조를 버리고 Transformer 구조를 사용하여 문제를 해결하였다. Transformer는 RNN과 달리 임의의 위치에서 정보를 즉각적으로 가져올 수 있기 때문에 학습 데이터를 구성할 때 순서대로 구성하지 않아도 되고, 이전 batch를 처리한 hidden state를 다음 batch를 처리하는 연산에 전달하지 않아도 된다. 
 
 Character-leveling modeling에 사용되는 objective는 다음과 같다.
+
 $$
+
 Pr(t_{0:L}) = P(t_0) \prod_{i=1}^{L} Pr(t_i \mid t_{0:i-1})
+
 $$
 
 조건부 확률분포 $Pr(t_i \mid t_{0:i-1})$을 계산하기 위해서 Transformer를 사용하여 character sequence $t_{0:i-1}$을 처리한다.  이 논문에서는 64개의 Transformer Layer (multihead self attention sub layer + FFN)을 사용하여 모델을 구성한다.
