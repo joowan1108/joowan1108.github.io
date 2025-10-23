@@ -33,7 +33,7 @@ $$
 
 조건부 확률분포 $Pr(t_i \mid t_{0:i-1})$을 계산하기 위해서 Transformer를 사용하여 character sequence $t_{0:i-1}$을 처리한다.  이 논문에서는 64개의 Transformer Layer (multihead self attention sub layer + FFN)을 사용하여 모델을 구성한다.
 
-![joowan1108]({{site.url}}/images/papers/characterlevel/first.png) 
+![joowan1108]({{site.url}}/images/papers/characterlevel/first.PNG) 
 
 ## Auxiliary losses 
 
@@ -45,18 +45,18 @@ $$
 
 원래는 $t_i$를 예측하기 위해서 $t_0 ~ t_{i-1}$으로 하나의 예측값을 계산하지만 이 논문에서는 final layer의 모든 position에서 다음 token을 예측하게 하여 총 |$L$| 번의 예측을 하도록 하였다. 이 예측값과 실제 token 값을 통해 auxiliary loss를 구성하였다. 이 방법으로 model이 small context 내에서 다음 character를 예측하도록 하였다고 생각하면 된다. 
 
-![joowan1108]({{site.url}}/images/papers/characterlevel/second.png) 
+![joowan1108]({{site.url}}/images/papers/characterlevel/second.PNG) 
 
 ### 2) Intermediate Layer Losses
 
 마지막 layer 뿐만 아니라 intermediate layer들에도 Next token 예측을 하게 하여 더 많은 loss들을 만들었다. 이때, 초반의 layer 일수록 예측값의 신뢰도가 떨어지기 때문에 이 layer에서 계산한 loss들의 weight는 작게 하였다. 이를 generalize하면 총 N개의 layer가 존재한다면, i번째 layer는 $\frac {i} {2N}$번째 training step까지만 관여하도록 하였다. 즉, 모든 intermediate layer loss는 학습 절반 이후부터는 사라진다.
 
-![joowan1108]({{site.url}}/images/papers/characterlevel/third.png) 
+![joowan1108]({{site.url}}/images/papers/characterlevel/third.PNG) 
 
 ### 3) Multiple Targets
 각 position에서 하나의 예측이 아니라 여러개의 예측을 하도록 하였다.
 
-![joowan1108]({{site.url}}/images/papers/characterlevel/fourth.png) 
+![joowan1108]({{site.url}}/images/papers/characterlevel/fourth.PNG) 
 
 
 ## Positional Embeddings
