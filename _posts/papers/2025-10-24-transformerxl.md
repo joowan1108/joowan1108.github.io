@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context 리뷰"
+title: Transformer-XL Attentive Language Models Beyond a Fixed-Length Context 리뷰"
 categories: paper
 tag: [NLP]
 author_profile: false
@@ -68,7 +68,9 @@ $$
   
 이를 통해 최대 $O(N \times L)$ dependency length까지 고려할 수 있게 되었다. 또, 추론 속도도 높아진다. Vanilla Transformer는 새로운 token을 예측할 때마다 그 token을 기존 context에 다시 포함시켜 self attention을 계산해야 했지만, Transformer-XL은 이전 hidden state을 다시 사용하여 시간을 줄인다.  
 
-그림을 보면 알 수 있듯이 충분한 GPU만 있다면 이전 segment 정보 뿐만 아니라 더 과거의 내용까지 고려할 수 있다. 따라서 $h_r^{n-1}$로 표현하지 않고 $m_r^n \in \R^{M \times d}$로 표현하기로 하였다. 
+![joowan1108]({{site.url}}/images/papers/transformerxl/xl_inference.PNG)  
+
+이때, 그림을 보면 알 수 있듯이 충분한 GPU만 있다면 이전 segment 정보 뿐만 아니라 더 과거의 내용까지 고려할 수 있다. 따라서 $h_r^{n-1}$로 표현하지 않고 $m_r^n \in \R^{M \times d}$로 표현하기로 하였다. 
   
   
 ### Relative Positional Encoding  
