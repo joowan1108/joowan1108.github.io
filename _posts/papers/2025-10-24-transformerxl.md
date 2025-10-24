@@ -13,7 +13,7 @@ use_math: true
 ---  
   
 # Background  
-현재 Neural Network를 통해 long term dependency를 고려하는 것은 어렵다. RNN 기반 모델들은 exploding/vanishing gradient 문제가 존재하고 Attention 기반 모델들 (논문에서는 [Character level language transformer]([[https://joowan1108.github.io/paper/characterlevellanguagemodeling/)를 언급)은 RNN을 능가하지만 여러 문제를 갖고 있다.
+현재 Neural Network를 통해 long term dependency를 고려하는 것은 어렵다. RNN 기반 모델들은 exploding/vanishing gradient 문제가 존재하고 Attention 기반 모델들 (논문에서는 [Character level language transformer](https://joowan1108.github.io/paper/characterlevellanguagemodeling/)를 언급)은 RNN을 능가하지만 여러 문제를 갖고 있다.
 
   
 1. Context Fragmentation  
