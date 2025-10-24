@@ -14,7 +14,7 @@ use_math: true
  
 Transformer-XL에서 언급되었기에 한번 읽어보았다.
  
- # Background
+# Background
 Character-level language modeling의 주된 어려움은 다음과 같다.
 1. Vocabulary 학습 범위가 매우 넓음
 2. Character 간 time dependency가 큼
