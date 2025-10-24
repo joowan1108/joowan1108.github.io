@@ -1,6 +1,6 @@
 ---
 layout: single
-title: Transformer-XL Attentive Language Models Beyond a Fixed-Length Context 리뷰"
+title: Transformer-XL Attentive Language Models Beyond a Fixed-Length Context 리뷰
 categories: paper
 tag: [NLP]
 author_profile: false
