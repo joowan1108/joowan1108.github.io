@@ -46,7 +46,7 @@ $$
 ### Segment-Level Recurrence with State Reuse  
 이전 segment의 hidden state를 fix하여 현재 segment의 hidden state을 계산할 때 cache된다. 이를 통해 현재 segment를 처리할 때 이전 segment의 정보를 고려할 수 있게 된다. 이 방법을 통해 long term dependency를 고려할 수 있게 되고 context fragmentation을 해결할 수 있게 된다.  
   
-이 내용을 수식으로 표현해보자. $L$ 길이를 가진 두 segment $s_r = [x_{r,l}, ... , x_{r,L}]$와 $s_{r+1} = [x_{r+1,l}, ... , x_{r+1,L}]$가 존재한다고 하자. 그리고 n번째 layer의 segment $s_r$의 hidden state를 $h_r^n \in \R^{L \times d}$ where d = hidden dimension라고 하자. 그렇다면 n번째 layer의 다음 segment $s_{r+1}$의 hidden state $h_{r+1} ^ n$는 다음 방법으로 계산된다.  
+이 내용을 수식으로 표현해보자. $L$ 길이를 가진 두 segment $s_r = [x_{r,l}, ... , x_{r,L}]$와 $s_{r+1} = [x_{r+1,l}, ... , x_{r+1,L}]$가 존재한다고 하자. 그리고 n번째 layer의 segment $s_r$의 hidden state를 $h_r^n \in R^{L \times d}$ where d = hidden dimension라고 하자. 그렇다면 n번째 layer의 다음 segment $s_{r+1}$의 hidden state $h_{r+1} ^ n$는 다음 방법으로 계산된다.  
   
 $$  
 \tilde h_{r+1}^{n-1} = [SG(h_r^{n-1}) \bullet h_{r+1}^{n-1}]  
@@ -70,13 +70,13 @@ $$
 
 ![joowan1108]({{site.url}}/images/papers/transformerxl/xl_inference.PNG)  
 
-이때, 그림을 보면 알 수 있듯이 충분한 GPU만 있다면 이전 segment 정보 뿐만 아니라 더 과거의 내용까지 고려할 수 있다. 따라서 $h_r^{n-1}$로 표현하지 않고 $m_r^n \in \R^{M \times d}$로 표현하기로 하였다. 
+이때, 그림을 보면 알 수 있듯이 충분한 GPU만 있다면 이전 segment 정보 뿐만 아니라 더 과거의 내용까지 고려할 수 있다. 따라서 $h_r^{n-1}$로 표현하지 않고 $m_r^n \in R^{M \times d}$로 표현하기로 하였다. 
   
   
 ### Relative Positional Encoding  
 Positional encoding은 정보를 어떻게 재구성하고 어디를 더 참고해야 할 지에 대한 정보를 제공하기 때문에 매우 중요하다. Recurrence를 적용할 때에도 Position 정보를 활용하기 위해서는 이전 segment와 현재 segment를 구분할 수 있어야 한다. 하지만 위치 정보 주입을 기존의 방법 (sinusoidal / learned absolute positional embedding을 더하는 방법)으로 한다면 이 둘은 구별이 불가능하다.  
   
-**이유:** Absolute positional embedding을 더하는 방법을 사용한다고 해보자. $U \in \R^{L_{max} \times d}$를 Absolute positional embedding이라고 하고 $E_{s_r}$를 sequence $s_r$의 word embedding sequence라고 하자.  
+**이유:** Absolute positional embedding을 더하는 방법을 사용한다고 해보자. $U \in R^{L_{max} \times d}$를 Absolute positional embedding이라고 하고 $E_{s_r}$를 sequence $s_r$의 word embedding sequence라고 하자.  
 $$  
 h_{r+1} = f(h_r, E_{s_{r+1}} + U_{1:L})  
 $$  
@@ -113,7 +113,7 @@ $$
   
 #### 변한 것 설명  
 1. 기존 transformer 식 (b)와 (d)에 있는 absolute positional embedding $U_j$을 relative positional embedding $R_{i-j}$로 바꿨다. 이는 어디를 참고해야 하는지 결정할 때 상대적 위치만 필요하다는 intuition을 반영한 것이다. 이때 R는 sinusoidal encoding matrix이다.  
-2. 기존 transformer 식 ( c )에 있는 $U_i^TW_q^T$를 학습 가능한 parameter $u \in \R^d$로 바꿨다. 즉, 기존 식에서는 query vector의 위치를 고려하여 attention score를 계산했지만, Transformer-XL에서는 query vector가 어떤 position에 있든지 동일하게 표현되도록 한 것이다. 이렇게 바꾼 이유는 다른 단어들을 향한 attentive bias가 query vector의 위치에 영향을 받지 않도록 하기 위해서이다. (d)의 $U_i^TW_q^T$가 $v \in \R^d$로 바뀐 이유도 동일하다.  
+2. 기존 transformer 식 ( c )에 있는 $U_i^TW_q^T$를 학습 가능한 parameter $u \in R^d$로 바꿨다. 즉, 기존 식에서는 query vector의 위치를 고려하여 attention score를 계산했지만, Transformer-XL에서는 query vector가 어떤 position에 있든지 동일하게 표현되도록 한 것이다. 이렇게 바꾼 이유는 다른 단어들을 향한 attentive bias가 query vector의 위치에 영향을 받지 않도록 하기 위해서이다. (d)의 $U_i^TW_q^T$가 $v \in R^d$로 바뀐 이유도 동일하다.  
 3. Key의 Weight matrix $W_k$를 $W_{k,E}$와 $W_{k,R}$으로 분해하여 content based key vectors와 location based key vectors를 표현하였다.  
   
 Transformer-XL attention score 식의 각 항은 직관적인 의미를 지니게 된다.  
