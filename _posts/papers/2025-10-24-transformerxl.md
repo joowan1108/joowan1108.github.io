@@ -94,10 +94,10 @@ $E_{s_r}$와 $E_{s_{r+1}}$은 동일한 positional embedding 값이 더해져서
 ### Attention score 변화  
   
 Standard Transformer의 query $q_i$와 key $k_j$의 attention score 식은 다음과 같다.  
-  
 $$  
 (W_q \,\cdot (E_{x_i} + U_i))^{T} \,\cdot (W_k \,\cdot (E_{x_j} + U_j))  
 $$  
+
 $$  
 = (a) \, E_{x_i}^T W_q^TW_kE_{x_j} + (b) \, E_{x_i}^T W_q^TW_kU_{j} + (c) \, U_i^TW_q^TW_kE_{x_j} + (d) \, U_i^TW_q^TW_kU_j  
 $$  
