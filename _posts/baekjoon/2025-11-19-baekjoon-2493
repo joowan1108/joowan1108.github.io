@@ -1,0 +1,107 @@
+---
+layout: single
+title: "BOJ 2493 탑"
+categories: baekjoon
+tag: [자료 구조, 스택]
+author_profile: false
+sidebar:
+    nav: "counts"
+toc: true
+toc_sticky: true
+toc_label: Table of Contents
+use_math: true
+---
+
+
+[문제](https://www.acmicpc.net/problem/2493)
+
+# 접근 방법
+
+리스트의 끝(오른쪽)부터 순서대로 진행해야 해서 스택을 사용해야 한다는 것을 생각해냈다.
+리스트의 오른쪽부터 stack에 넣고 리스트의 마지막 원소가 stack의 top보다 크다면, 신호가 만났다는 뜻이므로 stack에서 뺀다.
+마지막 원소가 stack의 top보다 작다면, 신호가 만나지 못하므로 stack에 넣는다. 
+이를 반복하면 신호가 만나는 애는 없어지고 못 만나는 애들은 남게 된다.
+
+이때 index에 1을 더한 값이 빌딩의 숫자기 때문에 index를 어떻게 들고가야 하는지에 대해 생각해내는 것이 어려웠다.
+
+## 내 정답 코드
+``` python
+import sys
+input = sys.stdin.readline
+
+'''
+제일 최근(바로 왼쪽에 있는) 애들에 대한 문제이므로 stack을 생각해야함
+list의 오른쪽부터 stack에 넣음. Stack에는 왼쪽에서 자기보다 큰 애를 못 찾은 애들이 들어가는 것이다.
+
+list의 마지막 원소가 stack의 top보다 크다면, pop.
+
+list의 마지막 원소가 stack의 top보다 작다면, 수신을 못하는 것이므로 stack에 append
+
+이걸을 반복하면 된다.
+
+'''
+
+n = int(input())
+
+builds = list(map(int, input().split()))
+
+result = dict()
+for b in builds:
+  result[b] = 0
+  
+stack = []
+bi = n-1
+while True:
+  if bi == -1:
+    break
+  if not stack:
+    stack.append(builds[bi])
+    bi -= 1
+  elif builds[bi] > stack[-1]:
+    result[stack.pop()] = bi+1
+
+  elif builds[bi] < stack[-1]:
+    stack.append(builds[bi])
+    bi -= 1
+
+for b in builds:
+  print(result[b], end=' ')
+  
+
+```
+
+이 문제를 해결하는데는 이미 있는 알고리즘이 있다. 오큰수라고 하는 알고리즘인데 작동 과정을 다음과 같다.
+stack에는 왼쪽에서 자기보다 큰 애를 못 찾은 애들의 index가 들어간다. list를 반대로 순회하면서 (왼쪽으로 레이저를 쏘면서) 자기보다 큰 애를 찾았다면 그 애의 index를 저장.
+어떻게 보면 내 코드와 비슷하다.
+
+## 오큰수 코드
+``` python
+import sys
+input = sys.stdin.readline
+
+
+n = int(input())
+
+builds = list(map(int, input().split()))
+
+result = dict()
+for b in builds:
+  result[b] = 0  
+stack = []
+
+'''
+왼큰수를 찾는 것
+'''
+
+for i in range(n-1, -1, -1):
+  #자기보다 큰 애를 찾으면 pop
+  while stack and builds[stack[-1]] < builds[i]:
+    result[builds[stack[-1]]] = i+1
+    stack.pop()
+  stack.append(i)
+
+for b in builds:
+  print(result[b], end=' ')
+  
+```
+
