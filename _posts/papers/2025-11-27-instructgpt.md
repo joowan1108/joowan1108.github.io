@@ -38,6 +38,7 @@ Language model이 user의 지시 사항을 잘 따르도록 하는 것을 user�
 	Reward 모델은 이 순위를 학습하여 어떤 답안이 더 human preference가 높을 지를 예측할 수 있도록 finetuning되었다. 이때, Reward 모델으로는 SFT model의 final unembedding layer만 제거하고 scalar reward를 출력할 수 있도록 변형한 모델을 사용하였다. 크기를 키울 수는 있지만 강화학습의 특성 상 학습 과정이 불안정할 것이라고 생각하여 6B의 크기로 하였다.
 
 	Reward 모델 loss function은 다음과 같다.
+
 	$$
 	loss(\theta) = - \frac {1} {_kC_2} \mathbb{E_{(x, y_w, y_l) \sim D}} \left [ log(\sigma(r_{\theta} (x,y_w) - r_{\theta} (x,y_l))) \right ]
 	$$
@@ -47,13 +48,17 @@ Language model이 user의 지시 사항을 잘 따르도록 하는 것을 user�
 > Reward Model의 loss function의 유도 과정은 다음과 같다.
 > Bradley Terry Model (BT)는 paired comparison이 있을 때, 누가 더 우위에 있는지를 확률적으로 예측하는 모델이다. 이 모델을 통해 reward 모델이 preference가 높은 답안에 더 높은 점수를 주는지 평가할 수 있다. 
 > 답변 $y_w$와 $y_l$이 있을 때, 두 점수 차이가 클수록 $y_w$가 $y_l$보다 더 좋다고 평가받을 확률이 높다고 판단한다.
+
 > $$
 p^{*}(y_w > y_l \mid x) = \frac {exp(r^{*}(x,y_w))} {exp(r^{*}(x,y_w)) + exp(r^{*}(x,y_l))}
 $$
+
 > 이 식을 정리하면 sigmoid 함수 ($sigma(x) = \frac {1} {1 + exp^{-x}}$)의 형태가 된다.
+
 > $$
 \frac {exp(r^{*}(x,y_w))} {exp(r^{*}(x,y_w)) + exp(r^{*}(x,y_l))} = \frac {1} {1+exp(r^{*}(x,y_l) - r^{*}(x,y_w))} = \sigma (r^{*}(x,y_w) - r^{*}(x,y_l)))
 $$
+
 > 이 식을 negative log likelihood를 적용하여 reward function의 loss function으로 만든 것이다.
 
 
