@@ -12,7 +12,6 @@ toc_label: Table of Contents
 use_math: true
 ---
 
-Title: Training language models to follow instructions with human feedback
 
 # Background
 
