@@ -5,7 +5,7 @@ categories: paper
 tag: [NLP]
 author_profile: false
 sidebar:
-    nav: "counts"
+  nav: "counts"
 toc: true
 toc_sticky: true
 toc_label: Table of Contents
@@ -23,27 +23,27 @@ Language model이 user의 지시 사항을 잘 따르도록 하는 것을 user�
 
 1) **Collect demonstration data and train a supervised policy**
 
-	임의의 Input prompt에 대해 선호되는 답변의 demonstration data를 통해 pretrained GPT-3 모델을 supervised learning을 통해 finetune 시키는 단계이다. 
+임의의 Input prompt에 대해 선호되는 답변의 demonstration data를 통해 pretrained GPT-3 모델을 supervised learning을 통해 finetune 시키는 단계이다. 
 
-	Input prompt 데이터는 OpenAI API의 Playgorund에 제출된 실제 user들의 prompt와 labeler들이 직접 생각해낸 instruction-like prompt들로 구성된다. Labeler들이 직접 작성한 prompt들은 Plain, Few-shot, User-based의 종류를 갖는다. Plain은 임의의 작업을 지시하는 prompt, few-shot은 지시문과 그에 따른 질의/응답 쌍을 포함한 prompt, 그리고 user-based는 실제 user들의 prompt을 기반으로 작성한 prompt이다. 이 dataset들로 세 가지의 dataset을 만든다. 우선 SFT dataset은 prompt와 labeler들의 정답 답안이 든 dataset이다. RM dataset은 prompt에 대한 model의 output의 순위 dataset이다. 마지막으로 PPO dataset은 prompt만 든 dataset이다.
-	
-	![joowan1108]({{site.url}}/images/papers/instructgpt/prompts.PNG)
+Input prompt 데이터는 OpenAI API의 Playgorund에 제출된 실제 user들의 prompt와 labeler들이 직접 생각해낸 instruction-like prompt들로 구성된다. Labeler들이 직접 작성한 prompt들은 Plain, Few-shot, User-based의 종류를 갖는다. Plain은 임의의 작업을 지시하는 prompt, few-shot은 지시문과 그에 따른 질의/응답 쌍을 포함한 prompt, 그리고 user-based는 실제 user들의 prompt을 기반으로 작성한 prompt이다. 이 dataset들로 세 가지의 dataset을 만든다. 우선 SFT dataset은 prompt와 labeler들의 정답 답안이 든 dataset이다. RM dataset은 prompt에 대한 model의 output의 순위 dataset이다. 마지막으로 PPO dataset은 prompt만 든 dataset이다.
 
-	이렇게 만든 SFT dataset으로 GPT-3에게 supervised하게 finetuning을 시킨다. 이렇게 학습된 모델은 Instruction이 주어졌을 때, 어느정도 대답을 할 수 있는 **SFT model**이 된다. 
-	
+![joowan1108]({{site.url}}/images/papers/instructgpt/prompts.PNG)
+
+이렇게 만든 SFT dataset으로 GPT-3에게 supervised하게 finetuning을 시킨다. 이렇게 학습된 모델은 Instruction이 주어졌을 때, 어느정도 대답을 할 수 있는 **SFT model**이 된다. 
+
 2) **Collect comparison data and train a reward model**
-	SFT model로 모델로 각 prompt에 대해 여러 output들을 얻어 labeler들에게 선호 정도를 기준으로 순위를 매기도록 하여 RM dataset (comparison data)을 만들었다. Comparison data를 더 빨리 얻기 위해 labeler들에게 k=4~k=9 개의 답변에 순위를 매기도록 하였다. 따라서 하나의 prompt에 대해서 $_kC_2$개의 comparison data가 생기는 것이다. 하지만 이 comparison data들이 서로 관련되어있기 때문에 하나의 dataset 안에  shuffle을 해버리면, data point들이 독립적이지 않게 되어 overfitting이 발생한다. 따라서, 하나의 prompt에 대해서 $_kC_2$개의 comparison data를 하나의 batch로 만들었다. 
 
+SFT model로 모델로 각 prompt에 대해 여러 output들을 얻어 labeler들에게 선호 정도를 기준으로 순위를 매기도록 하여 RM dataset (comparison data)을 만들었다. Comparison data를 더 빨리 얻기 위해 labeler들에게 k=4~k=9 개의 답변에 순위를 매기도록 하였다. 따라서 하나의 prompt에 대해서 $_kC_2$개의 comparison data가 생기는 것이다. 하지만 이 comparison data들이 서로 관련되어있기 때문에 하나의 dataset 안에  shuffle을 해버리면, data point들이 독립적이지 않게 되어 overfitting이 발생한다. 따라서, 하나의 prompt에 대해서 $_kC_2$개의 comparison data를 하나의 batch로 만들었다. 
 
-	Reward 모델은 이 순위를 학습하여 어떤 답안이 더 human preference가 높을 지를 예측할 수 있도록 finetuning되었다. 이때, Reward 모델으로는 SFT model의 final unembedding layer만 제거하고 scalar reward를 출력할 수 있도록 변형한 모델을 사용하였다. 크기를 키울 수는 있지만 강화학습의 특성 상 학습 과정이 불안정할 것이라고 생각하여 6B의 크기로 하였다.
+Reward 모델은 이 순위를 학습하여 어떤 답안이 더 human preference가 높을 지를 예측할 수 있도록 finetuning되었다. 이때, Reward 모델으로는 SFT model의 final unembedding layer만 제거하고 scalar reward를 출력할 수 있도록 변형한 모델을 사용하였다. 크기를 키울 수는 있지만 강화학습의 특성 상 학습 과정이 불안정할 것이라고 생각하여 6B의 크기로 하였다.
 
-	Reward 모델 loss function은 다음과 같다.
+Reward 모델 loss function은 다음과 같다.
 
-	$$
-	loss(\theta) = - \frac {1} {_kC_2} \mathbb{E_{(x, y_w, y_l) \sim D}} \left [ log(\sigma(r_{\theta} (x,y_w) - r_{\theta} (x,y_l))) \right ]
-	$$
-	
-	이때 $r_{\theta}(x,y)$는 prompt x와 답안 y에 대한 scalar output이다. $D$는 human comparison dataset이고 $y_w$은 선호되는 답안이고 $y_l$은 선호되지 않는 답안이다. (ranking이 더 높은 답안이 $y_w$) Cross entropy loss을 통해 선호 답변에 준 reward와 비선호 답변에 준 reward 간의 차이를 극대화하는 방향으로 학습을 한다.
+$$
+loss(\theta) = - \frac {1} {_kC_2} \mathbb{E_{(x, y_w, y_l) \sim D}} \left [ log(\sigma(r_{\theta} (x,y_w) - r_{\theta} (x,y_l))) \right ]
+$$
+
+이때 $r_{\theta}(x,y)$는 prompt x와 답안 y에 대한 scalar output이다. $D$는 human comparison dataset이고 $y_w$은 선호되는 답안이고 $y_l$은 선호되지 않는 답안이다. (ranking이 더 높은 답안이 $y_w$) Cross entropy loss을 통해 선호 답변에 준 reward와 비선호 답변에 준 reward 간의 차이를 극대화하는 방향으로 학습을 한다.
 
 > Reward Model의 loss function의 유도 과정은 다음과 같다.
 > Bradley Terry Model (BT)는 paired comparison이 있을 때, 누가 더 우위에 있는지를 확률적으로 예측하는 모델이다. 이 모델을 통해 reward 모델이 preference가 높은 답안에 더 높은 점수를 주는지 평가할 수 있다. 
@@ -63,14 +63,15 @@ $$
 
 
 3) Optimize a policy against the reward model using PPO
-	Reward model의 output을 scalar reward으로 사용하여 SFT policy를 PPO로 finetune한다. Input prompt가 주어질 때, policy $\phi$는 답변을 생성하고 reward model이 prompt와 답변을 모두 고려하여 reward를 계산하고 episode가 종료된다. 
+Reward model의 output을 scalar reward으로 사용하여 SFT policy를 PPO로 finetune한다. Input prompt가 주어질 때, policy $\phi$는 답변을 생성하고 reward model이 prompt와 답변을 모두 고려하여 reward를 계산하고 episode가 종료된다. 
 
-	$$
-	\text{Objective}(\phi) = \underbrace{\mathbb{E}_{(x,y) \sim D_{\pi_{\phi}^{\text{RL}}}} \left[ r_\theta(x, y) - \beta \log \left( \frac{\pi_{\phi}^{\text{RL}}(y|x)}{\pi^{\text{SFT}}(y|x)} \right) \right]}_{\text{PPO (RL part)}} + \underbrace{\gamma \mathbb{E}_{x \sim D_{\text{pretrain}}} [\log(\pi_{\phi}^{\text{RL}}(x))]}_{\text{ppo-ptx (Pretraining part)}}
-	$$
+$$
+\text{Objective}(\phi) = \underbrace{\mathbb{E}_{(x,y) \sim D_{\pi_{\phi}^{\text{RL}}}} \left[ r_\theta(x, y) - \beta \log \left( \frac{\pi_{\phi}^{\text{RL}}(y|x)}{\pi^{\text{SFT}}(y|x)} \right) \right]}_{\text{PPO (RL part)}} + \underbrace{\gamma \mathbb{E}_{x \sim D_{\text{pretrain}}} [\log(\pi_{\phi}^{\text{RL}}(x))]}_{\text{ppo-ptx (Pretraining part)}}
+$$
+
 여기서 PPO-PTX 부분은 PPO로만 학습을 했을 때, 말은 잘 듣지만 전체적인 NLP task 성능이 떨어졌기 때문이다.  본 논문은 PPO로만 학습을 할 경우, 말을 잘 듣는 것에 집중하기 때문에 NLP task 성능은 저하된 것이라고 판단하였다. 이 문제를 해결하기 위해 objective에 Pretraining 분포 data에 대한 log likelihood 항(pretraining을 할 때처럼 next token prediction의 log likelihood)을 더해서 말을 잘 듣는 것에만 집중하지 말고 NLP task 성능 향상에도 신경을 쓰도록 하였다. ***Next token prediction을 잘한다는 것은 NLP task 성능이 좋다는 것을 전제로 두는 것 같다.***
 
-	$\pi_{\phi}^{RL}$은 학습된 RL policy, $\pi^{SFT}$는 supervised trained model, $D_{pretrain}$은 pretraining 분포이다. 상수값 $\beta$와 $\gamma$는 KL penalty와 pretraining gradients의 강도를 결정한다. 
+$\pi_{\phi}^{RL}$은 학습된 RL policy, $\pi^{SFT}$는 supervised trained model, $D_{pretrain}$은 pretraining 분포이다. 상수값 $\beta$와 $\gamma$는 KL penalty와 pretraining gradients의 강도를 결정한다. 
 
 # Evaluation
 Alignment의 정의를 기반으로 Language model이 잘 align이 되었는지를 판단하기 위해서는 고려해야 하는 것들이 존재한다. 
@@ -90,7 +91,7 @@ PPO-ptx가 큰 모델에서는 성능이 조금 저하되긴 하지만 OpenAI AP
 
 ![joowan1108]({{site.url}}/images/papers/instructgpt/preferred.PNG)
 
- RLHF를 적용한 모델이 기존 모델들보다 대체로 customer assistant에 적합하고 user가 제시한 제한 사항들을 더 잘 따르는 경향이 크다. 그리고 closed domain task에서 halluciante하는 빈도 또한 작다. 이 결과를 통해 RLHF를 적용함으로써 더 믿음직하고 control하기 쉽다는 것을 알 수 있다. 
+RLHF를 적용한 모델이 기존 모델들보다 대체로 customer assistant에 적합하고 user가 제시한 제한 사항들을 더 잘 따르는 경향이 크다. 그리고 closed domain task에서 halluciante하는 빈도 또한 작다. 이 결과를 통해 RLHF를 적용함으로써 더 믿음직하고 control하기 쉽다는 것을 알 수 있다. 
 
 *SFT 모델에서 hallucination 빈도가 압도적으로 작은 것은 아마도 supervised learning만 하기 때문에 world 지식과 모델의 지식 일치율이 RLHF를 적용한 모델보다 더 높기 때문이라고 생각한다...*
 
