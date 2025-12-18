@@ -23,16 +23,13 @@ Reward model을 학습하는 방법은 크게 두 가지로 나뉜다.
   
 **(1) Outcome Supervision**  
 Model이 생성한 CoT의 마지막 결과만 실제 답과 비교하여 학습하는 방법  
-  
 $\rightarrow$ Outcome supervision은 과정이 틀려도 답만 맞으면 그 과정도 옳다고 학습하는 문제점이 있다.  
   
 **(2) Process Supervision**  
 Model이 생성한 CoT의 모든 step에 feedback을 받아 학습하는 방법  
-  
 $\rightarrow$ Process supervision은 더 자세한 feedback을 받을 수 있으며, 오류가 발생한 지점까지 알 수 있고, 사람의 생각하는 과정을 학습해서 alignment 효과가 더 뛰어나다.  
   
 하지만 이전 연구에서 Grade School Math 도메인에서 두 방법의 성능을 비교하였을 때, 비슷한 성능을 보였다. 본 논문은 이 의문점을 해결하기 위해 더 세밀한 실험을 설계하였다.  
-  
 - 더 좋은 base model을 사용  
 - human feedback 증가  
 - 더 어려운 수학 문제 도메인 (MATH: 수학 경시대회) 에서 성능을 평가  
