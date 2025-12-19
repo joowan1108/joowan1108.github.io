@@ -147,10 +147,10 @@ $\rightarrow$ ORM의 실제 성능보다 낮게 나올 수 있음
 - outcome supervision from final-answer checking
 
 **(1)의 문제 해결**
-Small scale에서는 동일한 크기의 답안들로 이루어진 dataset로 학습하도록 하고 오직 supervision의 방법만 달라지도록 하였다. Generator가 문제 별로 1~200개의 답안을 생성하도록 하고 이 답안으로 학습 dataset을 구성하였다. 이때, Process supervision을 하기 위해서 human labeler가 필요하지만 너무 cost가 높기 때문에 human labeler를 large scale process reward model $\text{PRM}_{\text{large}}$으로 대체한다. 각 step의 정답 label을  $\text{PRM}_{\text{large}}$을 통해 정했다고 보면 된다. 이 방법을 통해 동일한 크기와 내용의 dataset을 얻을 수 있게 되었다. 이 supervision을 process supervision from $\text{PRM}_{\text{large}}$이라고 부르기로 하였다.
+Small scale에서는 동일한 크기의 답안들로 이루어진 dataset로 학습하도록 하고 오직 supervision의 방법만 달라지도록 하였다. Generator가 문제 별로 1~200개의 답안을 생성하도록 하고 이 답안으로 학습 dataset을 구성하였다. 이때, Process supervision을 하기 위해서 human labeler가 필요하지만 너무 cost가 높기 때문에 human labeler를 large scale process reward model $PRM_{\text{large}}$으로 대체한다. 각 step의 정답 label을  $PRM_{\text{large}}$을 통해 정했다고 보면 된다. 이 방법을 통해 동일한 크기와 내용의 dataset을 얻을 수 있게 되었다. 이 supervision을 process supervision from $PRM_{\text{large}}$이라고 부르기로 하였다.
 
 **(2)의 문제 해결**
-Outcome supervision에서 False positive data를 없애기 위해 답이 맞아도 과정이 틀린 데이터는 Negative으로 label을 바꿔야 한다. 이 과정을 $\text{PRM}_{\text{large}}$을 통해 한다. $\text{PRM}_{\text{large}}$가 어떤 답안에 대해 주는 점수가 낮다면 (negative로 인식한다면), 답이 맞더라도 그 데이터의 label을 negative으로 바꾸었다. 이렇게 False positive을 없앤 dataset으로 한 outcome supervision을 outcome supervision from $\text{PRM}_{\text{large}}$이라고 부르기로 하였다.
+Outcome supervision에서 False positive data를 없애기 위해 답이 맞아도 과정이 틀린 데이터는 Negative으로 label을 바꿔야 한다. 이 과정을 $PRM$을 통해 한다. $PRM_{\text{large}}$가 어떤 답안에 대해 주는 점수가 낮다면 (negative로 인식한다면), 답이 맞더라도 그 데이터의 label을 negative으로 바꾸었다. 이렇게 False positive을 없앤 dataset으로 한 outcome supervision을 outcome supervision from $PRM_{\text{large}}$이라고 부르기로 하였다.
 
 > outcome supervision from final-answer checking은 기존과 동일하게 답만 맞으면 data에 positive label을 주어 진행되는 supervision이다.
 
