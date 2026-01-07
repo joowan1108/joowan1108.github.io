@@ -1,4 +1,16 @@
-Evaluating small language models for news summarization: implications and factors influencing performance  
+---
+layout: single
+title: Evaluating Small Language Models for News Summarization: Implications and Factors Influencing Performance 리뷰
+categories: paper
+tag: [NLP]
+author_profile: false
+sidebar:
+    nav: "counts"
+toc: true
+toc_sticky: true
+toc_label: Table of Contents
+use_math: true
+---  
 
 # Background  
 
