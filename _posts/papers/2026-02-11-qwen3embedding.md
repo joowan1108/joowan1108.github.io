@@ -31,24 +31,24 @@ Embedding과 reranking의 핵심은 주어진 task 방향 내에서 text 간의 
   
 Qwen3 Embedding / reranking 모델은 모두 Qwen3 (0.6B, 4B, 8B)을 토대로 만들었다.  
   
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/table1.PNG)
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/table1.png)
   
 Qwen3 (LLM)의 text 이해력과 instruction following 능력이 embedding/reranking 성능 향상에 큰 역할을 할 것이라고 가정한 것이다.  
   
   
 **Embedding Models**  
 
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/figure1_1.PNG)
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/figure1_1.png)
 
 Qwen3는 causal attention을 사용하는 decoder-only model이기에 모든 context 내용을 담는 text embedding을 계산하기 위해서는 [EOS] token을 input sequence 끝에 붙였다. 이렇게 하면 causal attention을 처음부터 차례대로 하면서 결국 전체 context 내용이 [EOS]에 담기기 때문이다. 즉, 최종 text embedding을 마지막 layer에서 [EOS] token의 hidden state으로 정의하였다.  
   
 Embedding이 instruction의 방향성대로 정보를 담을 수 있게 하기 위해 instruction을 query 앞에 붙였다.  
   
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/prompt1.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/prompt1.png) 
   
 **Reranking Models**  
 
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/figure1_2.PNG)
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/figure1_2.png)
 
 Reranking model이 텍스트 유사도를 더 정밀하게 측정하기 위해, LLM을 활용하여 하나의 query에 대해서 각 문서를 개별적으로 점수 매기는 방식을 사용했다. (point-wise reranking within a single context)  
   
@@ -56,7 +56,7 @@ Embedding model처럼 reranking model이 instruction의 의도대로 reranking�
   
 이때, 텍스트 유사도 검사를 binary classification task으로 정의하여 연관성 유무에 따라 "yes" or "no"로만 답하도록 하였다.  
   
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/prompt2.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/prompt2.png) 
   
 Instruction과 query가 주어졌을 때 document의 최종 relevance 점수는 "yes"와 "no"으로 대답할 likelihood을 토대로 계산하였다.  
   
@@ -125,7 +125,7 @@ $$
   
 >Large-scale unsupervised pre-training은 모델의 범용성 (generalization)에 큰 영향을 주고 fine-tuning은 모델의 성능 향상에 영향을 준다.  
  
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/figure2.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/figure2.png) 
  
 이때, Qwen3 Embedding은 두 stage에서 모두 동일한 objective function을 사용한다.  
   
@@ -159,13 +159,13 @@ Qwen3 Embedding은 기존의 연구들과 다른 학습 data를 구축한다.
 **Text embedding model evaluation**
 Text embedding model을 평가하기 위해서 MMTEB (Massive Multilingual Text Embedding Benchmark)을 사용하였다. 이 benchmark는 large-scale일 뿐만 아니라 250개 이상의 언어로 되어 있으며 500개 이상의 task으로 평가를 할 수 있다.
 
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/table2.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/table2.png) 
 
 Qwen3 embedding 4B, 8B는 SoTA 성능을 보였고 제일 작은 0.6B 모델 또한 제일 좋은 성능의 baseline보다 살짝 뒤쳐진다.
 
 MTEB으로도 평가를 하였다.
 
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/table3.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/table3.png) 
 
 이 benchmark에서도 비슷한 양상을 보였다.
 
@@ -175,7 +175,7 @@ Reranking model을 평가하기 위해서는 text retrieval tasks 중 몇 개를
 
 이때, 통제 변인으로 Reranking을 적용하는 pool을  동일하도록 하였다. *Qwen embedding 0.6B가 retrieve한 100개의 relevant document pool 안에서 reranking을 적용하도록 하였다.*
 
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/table4.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/table4.png) 
 
 모든 Qwen3 reranking 모델들이 다른 baseline을 능가하는 결과를 보여준다.
 
@@ -185,7 +185,7 @@ Reranking model을 평가하기 위해서는 text retrieval tasks 중 몇 개를
 
 Large-scale unsupervised 학습 과정의 효과를 탐구하였다. 그러기 위해서 Qwen3-Embedding 0.6B 모델을 unsupervised training만 거치게 한 것 (w/ only synthetic data), unsupervised training을 하지 않은 것 (w/o synthetic data), 그리고 논문에서 제시한 pipeline을 그대로 따른 모델들끼리 비교하였다.
 
-![joowan1108]({{site.url}}/images/papers/qwen3embedding/table5.PNG) 
+![joowan1108]({{site.url}}/images/papers/qwen3embedding/table5.png) 
 
 그 결과, unsupervised training만 거치더라도 (1st row)  원래대로 학습한 모델과 비슷한 성능을 보인다. 하지만 이 과정을 빼먹은 2nd row는 원래의 학습 pipeline을 거친 모델 (4th row)와 비교했을 때, 성능 저하가 뚜렷해진다. 이를 통해 Large-scale unsupervised 학습 과정의 효과가 컸음을 볼 수 있다.
 
