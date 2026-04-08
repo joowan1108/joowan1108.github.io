@@ -68,30 +68,64 @@ $$
 
 방법 1처럼 다 전개해서 풀어도 되지만 w의 개수가 많아질수록 계산량이 복잡해진다.
 
-$$\sum_{i=1}^{n} x_{i0} (f(\mathbf{x}_i) - y_i) = 0$$
-$$\sum_{i=1}^{n} x_{i1} (f(\mathbf{x}_i) - y_i) = 0$$
-$$\vdots$$
-$$\sum_{i=1}^{n} x_{id} (f(\mathbf{x}_i) - y_i) = 0$$
+$$
+\sum_{i=1}^{n} x_{i0} (f(\mathbf{x}_i) - y_i) = 0
+$$
+
+$$
+\sum_{i=1}^{n} x_{i1} (f(\mathbf{x}_i) - y_i) = 0
+$$
+
+$$
+\vdots
+$$
+
+$$
+\sum_{i=1}^{n} x_{id} (f(\mathbf{x}_i) - y_i) = 0
+$$
 
 이는 결국 다음과 같다.
 
-$$\sum_{i=1}^{n} x_{i0} (w_0 x_{i0} + w_1 x_{i1} + \dots + w_d x_{id} - y_i) = 0$$
-$$\sum_{i=1}^{n} x_{i1} (w_0 x_{i0} + w_1 x_{i1} + \dots + w_d x_{id} - y_i) = 0$$
-$$\vdots$$
-$$\sum_{i=1}^{n} x_{id} (w_0 x_{i0} + w_1 x_{i1} + \dots + w_d x_{id} - y_i) = 0$$
+$$
+\sum_{i=1}^{n} x_{i0} (w_0 x_{i0} + w_1 x_{i1} + \dots + w_d x_{id} - y_i) = 0
+$$
+
+$$
+\sum_{i=1}^{n} x_{i1} (w_0 x_{i0} + w_1 x_{i1} + \dots + w_d x_{id} - y_i) = 0
+$$
+
+$$
+\vdots
+$$
+
+$$
+\sum_{i=1}^{n} x_{id} (w_0 x_{i0} + w_1 x_{i1} + \dots + w_d x_{id} - y_i) = 0
+$$
 
 이때, 이를 w에 대해서 정리하면
 
-$$w_0 \sum_{i=1}^{n} x_{i0} x_{i0} + w_1 \sum_{i=1}^{n} x_{i0} x_{i1} + \dots + w_d \sum_{i=1}^{n} x_{i0} x_{id} = \sum_{i=1}^{n} x_{i0} y_i$$
-$$w_0 \sum_{i=1}^{n} x_{i1} x_{i0} + w_1 \sum_{i=1}^{n} x_{i1} x_{i1} + \dots + w_d \sum_{i=1}^{n} x_{i1} x_{id} = \sum_{i=1}^{n} x_{i1} y_i$$
-$$\vdots$$
-$$w_0 \sum_{i=1}^{n} x_{id} x_{i0} + w_1 \sum_{i=1}^{n} x_{id} x_{i1} + \dots + w_d \sum_{i=1}^{n} x_{id} x_{id} = \sum_{i=1}^{n} x_{id} y_i$$
+$$
+w_0 \sum_{i=1}^{n} x_{i0} x_{i0} + w_1 \sum_{i=1}^{n} x_{i0} x_{i1} + \dots + w_d \sum_{i=1}^{n} x_{i0} x_{id} = \sum_{i=1}^{n} x_{i0} y_i
+$$
+
+$$
+w_0 \sum_{i=1}^{n} x_{i1} x_{i0} + w_1 \sum_{i=1}^{n} x_{i1} x_{i1} + \dots + w_d \sum_{i=1}^{n} x_{i1} x_{id} = \sum_{i=1}^{n} x_{i1} y_i
+$$
+
+$$
+\vdots
+$$
+
+$$
+w_0 \sum_{i=1}^{n} x_{id} x_{i0} + w_1 \sum_{i=1}^{n} x_{id} x_{i1} + \dots + w_d \sum_{i=1}^{n} x_{id} x_{id} = \sum_{i=1}^{n} x_{id} y_i
+$$
 
 이 식들을 matrix으로 정리하게 된다면 엄청 간단하게 풀 수 있게 된다.
 
 ![joowan1108]({{site.url}}/images/SKKU_MLintroduction/regpage10.png)
 
 X을 다음과 같다고 하자.
+
 $$
 X = \begin{pmatrix}
 x_{10} & x_{11} & x_{12} & \dots & x_{1d} \\
