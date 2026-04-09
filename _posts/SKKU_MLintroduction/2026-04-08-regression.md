@@ -214,9 +214,130 @@ $$
 
 지금까지의 최적 w을 구하는 방법들은 E(w)가 w에 대해서 linear하다는 전제 하에 적용이 된다. 하지만 E(w)가 w에 대해서 무조건 linear 안 할 수가 있다. 예를 들어 $f(x) = w_0 +e^{w_1x_1} + sinw_2x_2$인 경우가 있다.
 
-$$E = \sum_{(x,y) \in \text{Data}} (y - (f(x)))^2$$
+$$
+E = \sum_{(x,y) \in \text{Data}} (y - (f(x)))^2
+$$
 
-이렇게 되면 E(w)은 w에 대해 non-linear하게 되므로 방법 1,2을 적용할 수 없다. 그렇다면 어떻게 최적의 w을 구할 것인가??
+이렇게 되면 E(w)은 w에 대해 non-linear하게 되므로 방법 1,2을 적용할 수 없다. 그렇다면 최적의 w을 구할 수 있나..?
+
+$\rightarrow$ 구할 수 있다. 왜냐하면 E는 그래도 w에 대해서 convex (이차함수 모양)이기 때문이다. 즉, 명확한 최솟값을 갖기 때문이다. 하지만 방법 1,2과 다른 점은 정확한 정답을 구할 수는 없다는 것이다.
+
+방법 1,2는 명확한 절대적인 최솟값을 갖게 하는 w을 구했다면
+
+![joowan1108]({{site.url}}/images/SKKU_MLintroduction/page5_up_gdm.png)
+
+방법 3은 명확하진 않지만 주변보단 최솟값, 즉 local minimum을 갖게 하는 w을 구하는 과정인 것이다.
+
+![joowan1108]({{site.url}}/images/SKKU_MLintroduction/page5_down_gdm.png)
+
+
+이 방법 3을 **Gradient Descent Method**이라고 부른다.
+
+1. 임의의 시작점 $w^0$을 정한다
+2. t = 0
+3. 다음 과정을 stopping condition에 도달할 때까지 반복한다
+    $$
+    w^{t+1} = w^t - \eta \frac {dE} {dw}_{w = w^t}
+    $$
+
+    $$
+    t = t+1
+    $$
+
+>이때, stopping condition은 gradient의 크기가 너무 작아 변화가 안 일어나거나, 일정 반복 횟수에 도달했을 때를 의미한다.
+
+Multivariate case, 즉 w가 예를 들어 $w_0^0, w_1^0$으로 이뤄졌다고 할 때도 마찬가지로 적용하면 된다.
+
+1. 임의의 시작점 $w_0^0, w_1^0$을 정한다
+2. t=0
+3. 다음 과정을 stopping condition에 도달할 때까지 반복한다
+    $$
+    w_0^{t+1} = w^t - \eta \frac {dE} {dw_0}_{w_0 = w_0^t, w_1 = w_1^t}
+    $$
+
+    $$
+    w_1^{t+1} = w^t - \eta \frac {dE} {dw_1}_{w_0 = w_0^t, w_1 = w_1^t}
+    $$
+
+    $$
+    t = t+1
+    $$
+
+ Gradient Descent Method을 하기 위한 가장 직관적인 방법을 소개한다
+
+$f(x; w_0, w_1) = w_1x + w_0$으로 dataset $D = (0,0), (1,1), (1,2)$을 제일 잘 표현하는 w을 구한다고 해보자.
+
+그러면 우선 E의 정확한 식을 구한다
+
+
+$$
+E(w_0, w_1) = (0 - f(0; w_0, w_1))^2 + (1 - f(1; w_0, w_1))^2 + (2 - f(1; w_0, w_1))^2
+$$
+
+
+$$
+E(w_0, w_1) = (0 - w_0)^2 + (1 - (w_1 + w_0))^2 + (2 - (w_1 + w_0))^2
+$$
+
+$$
+E(w_0, w_1) = 2w_1^2 + 3w_0^2 - 6w_1 - 6w_0 + 4w_1w_0 + 5
+$$
+
+Gradient descent에 적용하기 위해서는 $\frac {dE} {dw_0}$와 $\frac {dE} {dw_1}$을 각각 구해야 하기 때문에 구한다면
+
+$$
+\frac {\partial E} {\partial w_0} = 4w_1 + 6w_0 - 6
+$$
+
+$$
+\frac {\partial E} {\partial w_1} = 4w_1 + 4w_0 - 6
+$$
+
+이렇게 구한 gradient들을 대입
+
+![joowan1108]({{site.url}}/images/SKKU_MLintroduction/page27_gdm.png)
+
+
+이 예시는 데이터의 개수가 3개라서 금방 구했다. 하지만 데이터 개수가 많아진다면 어떻게 될까? E의 식은 다음과 같다
+
+$$
+E(w_0, w_1) = \sum_{(\mathbf{x}_i, y_i) \in Data} (y_i - f(\mathbf{x}_i; w_1, w_0))^2
+$$
+
+이때, data 수가 엄청 많다면 E의 정확한 식을 다 전개해야 하기 때문에 너무 복잡해진다. 또 다 전개한 식을 각 variable w에 대해 미분해야 해서 계산이 어려워진다.
+
+이를 해결하기 위해 E의 정확한 식을 얻지 않고도 미분을 먼저 적용하면 된다.
+
+
+$$
+E_i(\mathbf{x}_i, y_i; w_1, w_0) = (y_i - f(\mathbf{x}_i; w_1, w_0))^2
+$$
+
+
+$$
+\frac{\partial}{\partial w_j} E(w_0, w_1) = \frac{\partial}{\partial w_j} \sum_{(\mathbf{x}_i, y_i) \in Data} E_i(\mathbf{x}_i, y_i; w_1, w_0) = \sum_{(\mathbf{x}_i, y_i) \in Data} \frac{\partial}{\partial w_j} E_i(\mathbf{x}_i, y_i; w_1, w_0)
+$$
+
+이를 간단히 설명하면 다음 그림처럼 표현된다
+
+![joowan1108]({{site.url}}/images/SKKU_MLintroduction/page37_gdm.png)
+
+
+이 방법을 적용해서 동일한 예시를 풀어본다면
+
+$E_i = (y_i - (w_1x_i + w_0))^2$이므로
+
+$$
+\frac{\partial E_i}{\partial w_0} = -2 (y_i - (w_1x_i + w_0))
+$$
+
+$$
+\frac{\partial E_i}{\partial w_1} = -2 (y_i - (w_1x_i + w_0)) \cdot x_i
+$$
+
+이대로 대입하면
+
+![joowan1108]({{site.url}}/images/SKKU_MLintroduction/page40_gdm.png)
 
 
 ## Regression의 over/underfitting
