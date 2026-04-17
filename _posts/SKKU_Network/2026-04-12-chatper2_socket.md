@@ -79,8 +79,6 @@ TCP server는 UDP와 다르게 두 개의 socket을 사용한다.
 
 **Code**
 
-![joowan1108]({{site.url}}/images/SKKU_Network/chp2pg186.png)
-
 ![joowan1108]({{site.url}}/images/SKKU_Network/chp2pg187.png)
 
 ![joowan1108]({{site.url}}/images/SKKU_Network/chp2pg188.png)
