@@ -53,7 +53,7 @@ Cross validation은 학습에 사용되는 data을 최대한 늘리기 위해 da
 **장점**
 
 - Data가 random split 되더라도 k번 반복하기 때문에 variance가 작다
-- 모든 data point가 test data와 traning data에 관여한다
+- 모든 data point가 test data에 1번, traning data에 k-1번 관여한다
 
 **단점**
 - time consuming
