@@ -130,6 +130,9 @@ Data 부족으로 인해 yes였던 경우의 수 P(yes $\mid$ sunny, mild, high,
 
 이때, $\alpha n_i$와 $\alpha$ 값은 해결하는 문제의 domain에 대한 전문적인 지식으로 설정하는 것이다.
 
+$\alpha$의 값에 따라 naive bayes classifier가 overfitting이 될수도, underfitting이 될 수도 있다. 만약에 $\alpha$ 의 값이 너무 크게 된다면 모든 확률값 $P(A \mid class)$가 $\frac {\alpha} {\alpha N_i}$ 의 값을 갖게 되므로 data에 너무 둔감해진다. 즉, high bias low variance을 가진다. 
+
+반면 $\alpha$의 값이 너무 작아진다면, data에 너무 민감해져 overfitting 되며 low bias, high variance을 갖게 된다.
 
 ## 적용 상황 / 분야
 
