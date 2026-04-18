@@ -26,7 +26,7 @@ $$
 
 **Conditional Probability on Independence and Bayesian Rule**
 
-C가 주어졌을 때, A와 B가 독립적일 확률
+C가 주어졌을 때, A와 B가 독립적일 조건
 - $P(A, B \mid C) = P(A \mid C) P(B \mid C)$
 - $P(A \mid B, C) = P(A \mid \neg B, C) = P(A \mid C)$
 
