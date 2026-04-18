@@ -70,6 +70,12 @@ $\rightarrow$ model complexity는 non-zero w의 개수 또는 w의 크기에 비
 
 ![joowan1108]({{site.url}}/images/SKKU_MLintroduction/regulpg16.png)
 
+$\rightarrow$ L2은 왜 sparsity가 없고 L1에는 있을까?
+
+    이 이유는 complexity C(W)의 gradient을 통해 알 수 있다. L1의 미분값은 1,-1으로 일정하다. 따라서, gradient descent 과정에서 w값과 독립적으로 일정한 값이 더해지거나 빼져서 sparse할 가능성이 높아진다. 하지만 L2의 gradient는 2w으로 w값이 0에 가까울수록 gradient의 크기도 작아져 sparse할 가능성이 낮아진다.
+
+    
+
 
 
 
