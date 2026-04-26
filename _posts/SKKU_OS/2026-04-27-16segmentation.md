@@ -12,6 +12,7 @@ toc_label: Table of Contents
 use_math: true
 ---
 
+
 # Segmentation
 
 Base and bounds을 사용할 때 virtual address space 자체를 넣어야 한다. 이때 address space을 잘 살펴보면 heap과 stack 사이에 사용되지 않는 free 공간이 존재한다는 것을 알 수 있다.

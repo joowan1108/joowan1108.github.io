@@ -12,6 +12,7 @@ toc_label: Table of Contents
 use_math: true
 ---
 
+
 # Memory Virtualization에 필요한 mechanism: Address Translation
 
 CPU virtualization에서 LDE, 즉 system call과 timer interrupt와 같은 hardware의 보조를 받았었다. Memory에서도 LDE처럼 hardware의 도움을 통해 memory virtualization을 가능하게 한다.

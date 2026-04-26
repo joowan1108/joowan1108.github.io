@@ -12,6 +12,7 @@ toc_label: Table of Contents
 use_math: true
 ---
 
+
 # Address Spaces
 
 초기에는 memory의 abstraction이 user에게 제공되지 않았었다. OS 안에는 그저 library만 존재하고 running program은 나머지 공간을 다 사용하는 구조였다.
