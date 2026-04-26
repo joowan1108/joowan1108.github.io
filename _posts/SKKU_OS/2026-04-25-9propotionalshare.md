@@ -1,3 +1,17 @@
+---
+layout: single
+title: "4: Propotional Share Scheduler"
+categories: SKKU_OS
+tag: [SKKU]
+author_profile: false
+sidebar:
+    nav: "counts"
+toc: true
+toc_sticky: true
+toc_label: Table of Contents
+use_math: true
+---
+
 # Propotional Share Scheduler
 
 지금까지 배운 scheduler는 turnaround time과 response time을 최소화하기 위한 scheduler였다. 하지만 Proportional Share Scheduler는 전혀 다른 성격을 지닌다.

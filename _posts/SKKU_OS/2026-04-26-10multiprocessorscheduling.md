@@ -1,3 +1,17 @@
+---
+layout: single
+title: "5: Multiprocessor Scheduler"
+categories: SKKU_OS
+tag: [SKKU]
+author_profile: false
+sidebar:
+    nav: "counts"
+toc: true
+toc_sticky: true
+toc_label: Table of Contents
+use_math: true
+---
+
 # Multiprocessor Scheduling
 
 Multiprocessor 환경과 Single processor 환경은 매우 다르다. 이 차이점은 cache으로부터 온다.
