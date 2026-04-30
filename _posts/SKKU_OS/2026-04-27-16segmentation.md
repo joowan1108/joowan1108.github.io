@@ -91,7 +91,7 @@ Virutal address을 14 bit으로 표현한다는 전제 하에 SEG_MASK는 몇개
 
 15KB = 15 * $2^10$ =  11 $\mid$ 1100 $\mid$ 0000 $\mid$ 0000 이다.
 
-따라서 segment code는 11, offset의 값은 1100 $\mid$ 0000 $\mid$ 0000으로 3KB이다. 하지만 앞서 설명했다싶이 stack은 다른 segment와 반대 방향으로 자라나기 때문에 offset을 다르게 구해야 한다. 이를 구하기 위해서는 - (logical segment의 최대 길이 - 일반적으로 구한 offset) 을 통해 얼만큼 반대방향으로 왔는지 알 수 있다. Segment offset은 12 bit으로 표현되기 때문에 어떻게 보면 segment의 최대 길이는 12 bit $\rightarrow$ $2^12 = 4 ^ 2^10$ 즉, 4KB으로 볼 수 있다. 따라서 최종 stack offset은 -(4KB - 3KB)으로 -1KB이다. 
+따라서 segment code는 11, offset의 값은 1100 $\mid$ 0000 $\mid$ 0000으로 3KB이다. 하지만 앞서 설명했다싶이 stack은 다른 segment와 반대 방향으로 자라나기 때문에 offset을 다르게 구해야 한다. 이를 구하기 위해서는 - (logical segment의 최대 길이 - 일반적으로 구한 offset) 을 통해 얼만큼 반대방향으로 왔는지 알 수 있다. Segment offset은 12 bit으로 표현되기 때문에 어떻게 보면 segment의 최대 길이는 12 bit $\rightarrow$ $2^{12} = 4 * 2^{10}$ 즉, 4KB으로 볼 수 있다. 따라서 최종 stack offset은 -(4KB - 3KB)으로 -1KB이다. 
 
 **따라서 최종 address translation은 28KB - 1KB = 27KB으로 된다.**
 

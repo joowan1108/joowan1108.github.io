@@ -151,7 +151,7 @@ head->next = NULL;
 
 이제 그럼 free()가 일어난다고 해보자. 두 번째 allocated 영역을 free한다고 하면 이 영역의 시작 지점의 위치를 구해야 한다. 
 
-Virtual address space에서 heap의 시작 지점은 16KB (16*$2^10$) 이므로 free되려는 영역의 시작 지점은 16500 = (16*$2^10$ + 8 + 100 + 8)이다. 따라서 free(16500)을 하면 할당했던 영역이 다시 free space가 되는 것이다. 이때, free 되려는 영역의 시작 지점에서 allocated 영역의 header는 않았다. 왜냐하면 이 header는 free space node의 header가 되어야 하기 때문이다. Free()의 결과 diagram은 다음과 같다.
+Virtual address space에서 heap의 시작 지점은 16KB (16*$2^{10}$) 이므로 free되려는 영역의 시작 지점은 16500 = (16*$2^{10}$ + 8 + 100 + 8)이다. 따라서 free(16500)을 하면 할당했던 영역이 다시 free space가 되는 것이다. 이때, free 되려는 영역의 시작 지점에서 allocated 영역의 header는 않았다. 왜냐하면 이 header는 free space node의 header가 되어야 하기 때문이다. Free()의 결과 diagram은 다음과 같다.
 
 ![joowan1108]({{site.url}}/images/SKKU_OS/pg201.png)
 
