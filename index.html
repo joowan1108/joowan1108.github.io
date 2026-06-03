@@ -1,6 +1,173 @@
 ---
 layout: home
+title: "Home"
 author_profile: true
+entries_layout: grid
 sidebar:
-    nav: "counts"
+  nav: "counts"
 ---
+
+<style>
+  .home-intro {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  .home-intro__eyebrow {
+    margin: 0 0 0.5rem;
+    color: #3f6f73;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .home-intro h1 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 2.2rem;
+    letter-spacing: 0;
+  }
+
+  .home-intro__lead {
+    max-width: 46rem;
+    margin-bottom: 1rem;
+    color: #4b5563;
+    font-size: 1rem;
+  }
+
+  .home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+  }
+
+  .home-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1rem;
+    color: #4b5563;
+    font-size: 0.9rem;
+  }
+
+  .home-contact a {
+    color: inherit;
+    font-weight: 700;
+  }
+
+  .home-panels {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .home-panel {
+    padding: 1.1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+  }
+
+  .home-panel h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+    letter-spacing: 0;
+  }
+
+  .home-panel ul {
+    margin-bottom: 0;
+    padding-left: 1.1rem;
+  }
+
+  .home-panel li + li {
+    margin-top: 0.35rem;
+  }
+
+  .home-writing-note {
+    margin-bottom: 1.2rem;
+    padding: 1rem 1.1rem;
+    border-left: 4px solid #3f6f73;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #4b5563;
+  }
+
+  .home-writing-note h2 {
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+    font-size: 1.15rem;
+    letter-spacing: 0;
+  }
+
+  .home-writing-note p {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 720px) {
+    .home-intro {
+      padding: 1.1rem;
+    }
+
+    .home-intro h1 {
+      font-size: 1.8rem;
+    }
+
+    .home-panels {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<section class="home-intro" aria-labelledby="home-title">
+  <p class="home-intro__eyebrow">Undergraduate Researcher - AI, Retrieval, and Agents</p>
+  <h1 id="home-title">Joowan Chae</h1>
+  <p class="home-intro__lead">
+    I am an undergraduate student at Sungkyunkwan University interested in language models, retrieval-augmented generation, preference optimization, and autonomous data agents. I use this blog to organize paper reviews, math notes, and implementation-oriented study logs.
+  </p>
+
+  <div class="home-actions" aria-label="Profile links">
+    <a class="btn btn--primary" href="/cv/">CV</a>
+    <a class="btn btn--inverse" href="mailto:joowancheachae@gmail.com">Email</a>
+    <a class="btn btn--inverse" href="https://github.com/joowan1108">GitHub</a>
+  </div>
+
+  <div class="home-contact">
+    <span>Email: <a href="mailto:joowancheachae@gmail.com">joowancheachae@gmail.com</a></span>
+    <span>GitHub: <a href="https://github.com/joowan1108">github.com/joowan1108</a></span>
+  </div>
+</section>
+
+<section class="home-panels" aria-label="Research interests">
+  <article class="home-panel">
+    <h2>Research Interests</h2>
+    <ul>
+      <li>LLM alignment and preference optimization</li>
+      <li>Retrieval-augmented generation and semantic search</li>
+      <li>Reasoning agents for structured data analysis</li>
+      <li>Embedding models and contrastive learning</li>
+    </ul>
+  </article>
+
+  <article class="home-panel">
+    <h2>Currently Writing About</h2>
+    <ul>
+      <li>Foundation model architectures and pre-training</li>
+      <li>LLM reasoning, ReAct-style workflows, and verification</li>
+      <li>Machine learning fundamentals and mathematical intuition</li>
+      <li>Course notes from operating systems, networks, and ML</li>
+    </ul>
+  </article>
+</section>
+
+<section class="home-writing-note" aria-labelledby="recent-writing-title">
+  <h2 id="recent-writing-title">Recent Writing</h2>
+  <p>
+    The latest posts below are automatically pulled from the blog. They usually include paper reviews, ML study notes, and computer science coursework summaries.
+  </p>
+</section>
