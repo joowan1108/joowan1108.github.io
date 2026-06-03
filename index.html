@@ -1,6 +1,5 @@
 ---
 layout: home
-title: "Home"
 author_profile: true
 entries_layout: grid
 sidebar:
@@ -8,12 +7,65 @@ sidebar:
 ---
 
 <style>
+  body.layout--home {
+    background: #f7f8fb !important;
+    color: #1f2937 !important;
+  }
+
+  .layout--home .initial-content,
+  .layout--home .archive {
+    background: #f7f8fb;
+  }
+
+  .layout--home .masthead,
+  .layout--home .greedy-nav {
+    background: #ffffff !important;
+  }
+
+  .layout--home .masthead {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  .layout--home .site-title,
+  .layout--home .site-subtitle,
+  .layout--home .greedy-nav a,
+  .layout--home .visible-links a,
+  .layout--home .hidden-links a {
+    color: #111827 !important;
+  }
+
+  .layout--home .sidebar,
+  .layout--home .sidebar p,
+  .layout--home .sidebar li,
+  .layout--home .sidebar a,
+  .layout--home .author__name,
+  .layout--home .author__bio {
+    color: #334155 !important;
+  }
+
+  .layout--home .archive__subtitle,
+  .layout--home .archive__item-title,
+  .layout--home .archive__item-title a {
+    color: #111827 !important;
+  }
+
+  .layout--home .archive__subtitle {
+    border-bottom-color: #e5e7eb !important;
+  }
+
+  .layout--home .archive__item-excerpt,
+  .layout--home .page__meta {
+    color: #64748b !important;
+  }
+
   .home-intro {
     margin-bottom: 2rem;
     padding: 1.5rem;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     background: #ffffff;
+    color: #1f2937;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
   }
 
   .home-intro__eyebrow {
@@ -28,6 +80,7 @@ sidebar:
   .home-intro h1 {
     margin-top: 0;
     margin-bottom: 0.75rem;
+    color: #111827 !important;
     font-size: 2.2rem;
     letter-spacing: 0;
   }
@@ -56,7 +109,7 @@ sidebar:
   }
 
   .home-contact a {
-    color: inherit;
+    color: #1f2937 !important;
     font-weight: 700;
   }
 
@@ -72,12 +125,19 @@ sidebar:
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     background: #ffffff;
+    color: #1f2937;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
   }
 
   .home-panel h2 {
     margin-top: 0;
+    color: #111827 !important;
     font-size: 1.15rem;
     letter-spacing: 0;
+  }
+
+  .home-panel li {
+    color: #4b5563;
   }
 
   .home-panel ul {
@@ -101,8 +161,14 @@ sidebar:
   .home-writing-note h2 {
     margin-top: 0;
     margin-bottom: 0.4rem;
+    color: #111827 !important;
     font-size: 1.15rem;
     letter-spacing: 0;
+  }
+
+  .home-actions .btn--inverse {
+    border-color: #94a3b8 !important;
+    color: #1f2937 !important;
   }
 
   .home-writing-note p {
@@ -125,14 +191,12 @@ sidebar:
 </style>
 
 <section class="home-intro" aria-labelledby="home-title">
-  <p class="home-intro__eyebrow">Undergraduate Researcher - AI, Retrieval, and Agents</p>
   <h1 id="home-title">Joowan Chae</h1>
   <p class="home-intro__lead">
-    I am an undergraduate student at Sungkyunkwan University interested in language models, retrieval-augmented generation, preference optimization, and autonomous data agents. I use this blog to organize paper reviews, math notes, and implementation-oriented study logs.
+    I am an undergraduate student at Sungkyunkwan University interested in language models, retrieval-augmented generation, preference optimization,autonomous data agents. I use this blog to organize paper reviews, math notes, and implementation-oriented study logs.
   </p>
 
   <div class="home-actions" aria-label="Profile links">
-    <a class="btn btn--primary" href="/cv/">CV</a>
     <a class="btn btn--inverse" href="mailto:joowancheachae@gmail.com">Email</a>
     <a class="btn btn--inverse" href="https://github.com/joowan1108">GitHub</a>
   </div>
@@ -147,15 +211,18 @@ sidebar:
   <article class="home-panel">
     <h2>Research Interests</h2>
     <ul>
-      <li>LLM alignment and preference optimization</li>
       <li>Retrieval-augmented generation and semantic search</li>
       <li>Reasoning agents for structured data analysis</li>
       <li>Embedding models and contrastive learning</li>
+      <li>LLM alignment and preference optimization</li>
+      <li>Reinforcement Learning</li>
+      <li>Multimodal reasoning for planning and control</li>
+      <li></li>Vision-Language-Action (VLA) models and embodied AI</li>
     </ul>
   </article>
 
   <article class="home-panel">
-    <h2>Currently Writing About</h2>
+    <h2>Currently Studying About</h2>
     <ul>
       <li>Foundation model architectures and pre-training</li>
       <li>LLM reasoning, ReAct-style workflows, and verification</li>
@@ -166,8 +233,5 @@ sidebar:
 </section>
 
 <section class="home-writing-note" aria-labelledby="recent-writing-title">
-  <h2 id="recent-writing-title">Recent Writing</h2>
-  <p>
-    The latest posts below are automatically pulled from the blog. They usually include paper reviews, ML study notes, and computer science coursework summaries.
-  </p>
+  <h2 id="recent-writing-title">Recent Posts</h2>
 </section>
