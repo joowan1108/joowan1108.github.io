@@ -37,7 +37,7 @@ UDP가 제공하는 services들을 알아보자.
 
 4. Error Control
 
-    Checksum을 사용하는 것 제외하고 별도의 error control을 하지 않는다. Sender는 보낸 정보다 lost/duplicate 되었는지 인지를 못한다. 
+    Checksum을 사용하는 것 제외하고 별도의 error control을 하지 않는다. Sender는 보낸 정보가 lost/duplicate 되었는지 인지를 못한다. 
 
     반면 receiver는 checksum을 통해 error을 감지하면 그냥 그 packet을 discard한다.
 
@@ -326,34 +326,34 @@ ACK가 들어올 때마다 $\text{cwnd} = \text{cwnd} + \frac{1} {\text{cwnd}}$ 
 
 1. Taho TCP
 
-Taho TCP에서는 timeout, three duplicate ACK가 발생했을 때 모두 cwnd 값을 1로 설정한다. 그리고 그때마다 ssthresh 값은 $\frac {\text{cwnd}} {2}$ 로 설정한다.
+    Taho TCP에서는 timeout, three duplicate ACK가 발생했을 때 모두 cwnd 값을 1로 설정한다. 그리고 그때마다 ssthresh 값은 $\frac {\text{cwnd}} {2}$ 로 설정한다.
 
-![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg143.png)
+    ![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg143.png)
 
-![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg144.png)
+    ![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg144.png)
 
-처음에는 slow start을 하다가 t=3, cwnd = 8 일 때 timeout이 나자 ssthresh = 4, cwnd = 1이 된다. 이때 cwnd 값이 ssthresh보다 낮기 때문에 다시 slow start가 되다가 ssthresh보다 커지게 되어 t=5에서 congestion avoidance가 시작되는 것을 볼 수 있다. t=13에서 3dupACKS가 발생했을 때에도 똑같이 ssthresh은 그때의 값의 절반인 12/2=6이 되고 cwnd은 1이 된다.  
+    처음에는 slow start을 하다가 t=3, cwnd = 8 일 때 timeout이 나자 ssthresh = 4, cwnd = 1이 된다. 이때 cwnd 값이 ssthresh보다 낮기 때문에 다시 slow start가 되다가 ssthresh보다 커지게 되어 t=5에서 congestion avoidance가 시작되는 것을 볼 수 있다. t=13에서 3dupACKS가 발생했을 때에도 똑같이 ssthresh은 그때의 값의 절반인 12/2=6이 되고 cwnd은 1이 된다.  
 
 
 2. Reno TCP
 
-Reno TCP는 three duplicates ACK가 발생할 때 fast recovery가 수행된다는 점에서 Taho와 다르다. 사실 three duplicates ACK는 timeout처럼 강한 congestion을 의미하는 것이 아니기 때문에 cwnd을 극단적으로 1로 낮출 필요가 없고 오히려 비효율적이다. Reno TCP는 이것을 고려하여 three duplicates ACK일 때는 cwnd = 1로 바꾸지 않고 fast recovery을 수행한다.
+    Reno TCP는 three duplicates ACK가 발생할 때 fast recovery가 수행된다는 점에서 Taho와 다르다. 사실 three duplicates ACK는 timeout처럼 강한 congestion을 의미하는 것이 아니기 때문에 cwnd을 극단적으로 1로 낮출 필요가 없고 오히려 비효율적이다. Reno TCP는 이것을 고려하여 three duplicates ACK일 때는 cwnd = 1로 바꾸지 않고 fast recovery을 수행한다.
 
-![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg145.png)
+    ![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg145.png)
 
-![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg146.png)
+    ![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg146.png)
 
-t=3일 때 timeout이 날 때는 Taho처럼 cwnd = 1, ssthresh을 8/2 = 4로 두는 것은 동일하다. 하지만 3dupACKs 일 때는 fast recovery로 인해 ssthresh = 12/2 = 6 이 되고 cwnd = ssthresh(6) + 3 = 9로 바뀌어 cwnd을 극단적으로 줄이지 않는다. 또, fast recovery 도중에 새로운 ACK가 도착한다면, cwnd = ssthresh으로 설정하고 congestion avoidance 단계로 간다는 것이 다르다.
+    t=3일 때 timeout이 날 때는 Taho처럼 cwnd = 1, ssthresh을 8/2 = 4로 두는 것은 동일하다. 하지만 3dupACKs 일 때는 fast recovery로 인해 ssthresh = 12/2 = 6 이 되고 cwnd = ssthresh(6) + 3 = 9로 바뀌어 cwnd을 극단적으로 줄이지 않는다. 또, fast recovery 도중에 새로운 ACK가 도착한다면, cwnd = ssthresh으로 설정하고 congestion avoidance 단계로 간다는 것이 다르다.
 
 3. NewReno TCP
 
-이 RenoTCP을 더 보완한 것이 Reno TCP이다. Reno TCP fast recovery 과정에서 새로운 ACK가 들어오면 이제 fast recovery을 할 필요없고 다시 congestion avoidance 단계로 넘어간다. 하지만 생각해보면 이건 하나의 segment만 유실되었을 때 효과적이다. 예를 들어, sender가 1,2,3,4,5을 보냈는데 1과 3이 유실되었다고 하자. Receiver는 1을 받지 못했기에 바로 ACK 1을 계속 보냈을 것이다. 그럼 결국 1에 대해 three duplicate ACK가 와서 Reno TCP는 바로 fast recovery을 수행한다. 그럼 이제 receiver는 1이 다시 왔기에 이제 유실되었던 3을 받기 위해 ACK 3을 보냈다고 하자. **이 상황에서 Reno TCP는 새로운 ACK가 왔기에 문제가 해결되었다고 보고 fast recovery을 끝내고 이제 receiver가 3,4,5 을 잘 처리 중이겠지 라고 착각하게 된다.** 이 착각으로 인해 3에 대해서 또 three duplicate ACK을 기다리거나 sender의 timer로 인해 timeout이 되어 성능 저하가 발생한다.
+    이 RenoTCP을 더 보완한 것이 Reno TCP이다. Reno TCP fast recovery 과정에서 새로운 ACK가 들어오면 이제 fast recovery을 할 필요없고 다시 congestion avoidance 단계로 넘어간다. 하지만 생각해보면 이건 하나의 segment만 유실되었을 때 효과적이다. 예를 들어, sender가 1,2,3,4,5을 보냈는데 1과 3이 유실되었다고 하자. Receiver는 1을 받지 못했기에 바로 ACK 1을 계속 보냈을 것이다. 그럼 결국 1에 대해 three duplicate ACK가 와서 Reno TCP는 바로 fast recovery을 수행한다. 그럼 이제 receiver는 1이 다시 왔기에 이제 유실되었던 3을 받기 위해 ACK 3을 보냈다고 하자. **이 상황에서 Reno TCP는 새로운 ACK가 왔기에 문제가 해결되었다고 보고 fast recovery을 끝내고 이제 receiver가 3,4,5 을 잘 처리 중이겠지 라고 착각하게 된다.** 이 착각으로 인해 3에 대해서 또 three duplicate ACK을 기다리거나 sender의 timer로 인해 timeout이 되어 성능 저하가 발생한다.
 
-이런 문제를 해결하기 위해 New Reno TCP는 three duplicate ACK가 오고나서 새로운 ACK가 오자마자 바로 fast recovery을 끝내는 것이 아니라 더 lost가 된 segment가 있는지 한번 더 확인한다. 새로 들어온 ACK가 재전송한 segment 번호와 send window 끝 번호 사이라면, 새로 들어온 ACK 번호를 가진 segment도 유실되었다고 판단하여 바로 재전송한다. 이런 방법을 사용하면 timeout이 생길 가능성이 줄어들어 성능 저하를 막을 수 있는 것이다.
+    이런 문제를 해결하기 위해 New Reno TCP는 three duplicate ACK가 오고나서 새로운 ACK가 오자마자 바로 fast recovery을 끝내는 것이 아니라 더 lost가 된 segment가 있는지 한번 더 확인한다. 새로 들어온 ACK가 재전송한 segment 번호와 send window 끝 번호 사이라면, 새로 들어온 ACK 번호를 가진 segment도 유실되었다고 판단하여 바로 재전송한다. 이런 방법을 사용하면 timeout이 생길 가능성이 줄어들어 성능 저하를 막을 수 있는 것이다.
 
-> TCP Congestion avoidance 단계, 즉 slow start가 끝나고 나서부터는 additive increase, multplicative decrease의 구조를 가진다. 이를 AIMD라고 부르며 saw tooth과 비슷하다는 특징을 가진다.
+    > TCP Congestion avoidance 단계, 즉 slow start가 끝나고 나서부터는 additive increase, multplicative decrease의 구조를 가진다. 이를 AIMD라고 부르며 saw tooth과 비슷하다는 특징을 가진다.
 
-![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg148.png)
+    ![joowan1108]({{site.url}}/images/SKKU_Network/chp3pg148.png)
 
 
 **TCP Throughput**
