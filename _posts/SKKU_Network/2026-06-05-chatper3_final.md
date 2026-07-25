@@ -347,7 +347,7 @@ ACK가 들어올 때마다 $\text{cwnd} = \text{cwnd} + \frac{1} {\text{cwnd}}$ 
 
 3. NewReno TCP
 
-    이 RenoTCP을 더 보완한 것이 Reno TCP이다. Reno TCP fast recovery 과정에서 새로운 ACK가 들어오면 이제 fast recovery을 할 필요없고 다시 congestion avoidance 단계로 넘어간다. 하지만 생각해보면 이건 하나의 segment만 유실되었을 때 효과적이다. 예를 들어, sender가 1,2,3,4,5을 보냈는데 1과 3이 유실되었다고 하자. Receiver는 1을 받지 못했기에 바로 ACK 1을 계속 보냈을 것이다. 그럼 결국 1에 대해 three duplicate ACK가 와서 Reno TCP는 바로 fast recovery을 수행한다. 그럼 이제 receiver는 1이 다시 왔기에 이제 유실되었던 3을 받기 위해 ACK 3을 보냈다고 하자. **이 상황에서 Reno TCP는 새로운 ACK가 왔기에 문제가 해결되었다고 보고 fast recovery을 끝내고 이제 receiver가 3,4,5 을 잘 처리 중이겠지 라고 착각하게 된다.** 이 착각으로 인해 3에 대해서 또 three duplicate ACK을 기다리거나 sender의 timer로 인해 timeout이 되어 성능 저하가 발생한다.
+    이 RenoTCP을 더 보완한 것이 NewReno TCP이다. Reno TCP fast recovery 과정에서 새로운 ACK가 들어오면 이제 fast recovery을 할 필요없고 다시 congestion avoidance 단계로 넘어간다. 하지만 생각해보면 이건 하나의 segment만 유실되었을 때 효과적이다. 예를 들어, sender가 1,2,3,4,5을 보냈는데 1과 3이 유실되었다고 하자. Receiver는 1을 받지 못했기에 바로 ACK 1을 계속 보냈을 것이다. 그럼 결국 1에 대해 three duplicate ACK가 와서 Reno TCP는 바로 fast recovery을 수행한다. 그럼 이제 receiver는 1이 다시 왔기에 이제 유실되었던 3을 받기 위해 ACK 3을 보냈다고 하자. **이 상황에서 Reno TCP는 새로운 ACK가 왔기에 문제가 해결되었다고 보고 fast recovery을 끝내고 이제 receiver가 3,4,5 을 잘 처리 중이겠지 라고 착각하게 된다.** 이 착각으로 인해 3에 대해서 또 three duplicate ACK을 기다리거나 sender의 timer로 인해 timeout이 되어 성능 저하가 발생한다.
 
     이런 문제를 해결하기 위해 New Reno TCP는 three duplicate ACK가 오고나서 새로운 ACK가 오자마자 바로 fast recovery을 끝내는 것이 아니라 더 lost가 된 segment가 있는지 한번 더 확인한다. 새로 들어온 ACK가 재전송한 segment 번호와 send window 끝 번호 사이라면, 새로 들어온 ACK 번호를 가진 segment도 유실되었다고 판단하여 바로 재전송한다. 이런 방법을 사용하면 timeout이 생길 가능성이 줄어들어 성능 저하를 막을 수 있는 것이다.
 
@@ -364,9 +364,9 @@ $$
 \text{Throughput} = (0.75) * \text{W}_{max} / \text{RTT}
 $$
 
-이때, $W_{max}$는 congestion이 발생했을 때의 cwnd의 평균값이다. 
+이때, $W_{max}$ 는 congestion이 발생했을 때의 cwnd의 평균값이다. 
 
-혼잡이 발생하면 TCP의 cwnd가 대략 $\text{W}_{max}$ 에서 절반으로 줄었다가 다시 증가하므로, 실제 평균 전송량은 최대 윈도우의 평균값보다 작아져 대략 0.75 × $\text{W}_{max}$ 만큼의 데이터를 RTT마다 성공적으로 보낸다고 이해하면 된다.
+혼잡이 발생하면 TCP의 cwnd가 대략 $W_{max}$ 에서 절반으로 줄었다가 다시 증가하므로, 실제 평균 전송량은 최대 윈도우의 평균값보다 작아져 대략 0.75 × $W_{max}$ 만큼의 데이터를 RTT마다 성공적으로 보낸다고 이해하면 된다.
 
 
 위 그림을 예시로 들면, $W_{max} = \frac{10+12+10+8+8} {5} = 9.6 MSS$이다. MSS = 10KB이고 RTT = 100ms일 때 Throughput은 0.75 x 9.6 x 10 / 100 = 720KBps = 5.625Mbps이다. 
