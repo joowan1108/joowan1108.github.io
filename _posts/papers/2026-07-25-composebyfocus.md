@@ -22,7 +22,7 @@ Long horizon task을 해결하기 위해서 전체 task을 여러 개의 sub tas
 
 ![joowan1108]({{site.url}}/images/papers/composebyfocus/figure1.PNG)
 
-이때 high level planner (VLM)는 당근 담기 -> 가지 담기 -> 옥수수 담기 와 같은 계획을 세울 것이다. 
+이때 high-level planner (VLM)는 당근 담기 $\rightarrow$ 가지 담기 $\rightarrow$ 옥수수 담기와 같은 계획을 세울 것이다.
 
 본 논문은 개별 skill = 야채를 담는 skill을 학습할 때 table이 깨끗한 상태에서 학습을 한다면 distractors가 있는 상태에서 그 skill이 원하는대로 작동 안 할 확률이 높다고 주장한다. 
 
@@ -39,7 +39,7 @@ Long horizon task을 해결하기 위해서 전체 task을 여러 개의 sub tas
 
 Robotics에서 skill 조합 능력은 long horizon task에 중요하다. Task을 여러 sub task으로 나눌 수 있어야 한다. 
 
-LLM을 robotics에 적용하는 연구에서는 emta-skill 라이브러리를 통해서 high level planning에 집중하는데 low level에서의 action execution에서는 적용이 되고 있지 않다(?)
+LLM을 robotics에 적용하는 연구에서는 meta-skill 라이브러리를 통해서 high-level planning에 집중하는데 low-level action execution에는 적용되고 있지 않다(?)
 
 Task and Motion Planning에서는 discrete + continuous planning을 합쳐서 high + low level에서의 planning이 가능하지만 geometric/symbolic model가 요구되어서 generalization 능력이 부족하다.
 
@@ -59,10 +59,9 @@ Imitation learning은 조작 관련된 policy을 학습하는데 효과적으로
 
 본 논문은 long horizon task에서 skill들을 조합해서 해결하는 방법에 대해 탐구한다. 
 
-학습 데이터는 개별적인 skill에 대한 expert demonstration으로 한다. (ex: 사과를 그릇에 담기, cube을 당기기) 이때 skill을 정의할 때 "pick", "place"처럼 단순하고 기본저긴 단어가 아니라 task 문맥으로 정의를 하였다. 또, skill demonstration에서 distractors가 없도록 하였다. (어처피 scene graph으로 task에 맞는 object만 보게 할 것이므로)
+학습 데이터는 개별적인 skill에 대한 expert demonstration으로 한다. (ex: 사과를 그릇에 담기, cube를 당기기) 이때 skill을 정의할 때 "pick", "place"처럼 단순하고 기본적인 단어가 아니라 task 문맥으로 정의하였다. 또, skill demonstration에서 distractors가 없도록 하였다. (어차피 scene graph로 task에 맞는 object만 보게 할 것이므로)
 
-Observations O, scene graph G, skill 설명들을 L, action space을 A이라고 할 때 visuomotor policy $\pi : (G,L) -> A$
- 가 학습되어 모든 atomic skill들을 수행하도록 하는 것이다. 
+Observations $O$, scene graph $G$, skill 설명들을 $L$, action space를 $A$라고 할 때 visuomotor policy $\pi : (G,L) \rightarrow A$가 학습되어 모든 atomic skill들을 수행하도록 하는 것이다.
 
 ![joowan1108]({{site.url}}/images/papers/composebyfocus/figure2a.PNG)
 
@@ -70,7 +69,7 @@ Observations O, scene graph G, skill 설명들을 L, action space을 A이라고 
 
 demonstration의 RGB 이미지와 depth 이미지가 있다고 할 때, depth 이미지는 point clouds으로 바꾸고 gripper의 point clouds는 존재한다고 가정한다. 
 
-각 skill은 skill을 설명하는 언어 지시사항과 skill과 관련있는 object B와 pairing 한다.
+각 skill은 skill을 설명하는 언어 지시사항과 skill과 관련 있는 object $B$와 pairing한다.
 
 이미지로부터 object level의 정보를 얻기 위해서 vision foundation 모델을 사용하여 task와 관련있는 object만 보게 하기 위해 필요한 mask을 얻고 이 object들의 point clouds을 얻는다. 
 
@@ -82,7 +81,7 @@ Graph의 edges는 RGB 이미지와 VLM을 통해 뽑아낸 object 간의 역학�
 
 ### Multi Skill Policy Training
 
-Sub scene graph을 얻은 뒤에 2 layered Graph Attention Network을 통해서 scene graph을 feature embedding으로 변환하였다. 각 노드 $i \in V$ 는 input feature $h_i^{\text(0)} \in \R^{d_{\text{in}}}$ 으로 초기화된 것이다.
+Sub-scene graph를 얻은 뒤에 2-layered Graph Attention Network를 통해서 scene graph를 feature embedding으로 변환하였다. 각 노드 $i \in V$는 input feature $h_i^{(0)} \in \mathbb{R}^{d_{\mathrm{in}}}$으로 초기화된다.
 
 각 GAT layer $l$에서 node feature들은 다음과 같은 방법으로 update 된다.
  
@@ -90,9 +89,9 @@ $$
 h_i^{(\ell+1)} = \sigma_\ell \left( \mathop{\Big\|}_{m=1}^{H_\ell} \sum_{j \in \mathcal{N}(i)} \alpha_{ij}^{(\ell,m)} W^{(\ell,m)} h_j^{(\ell)} \right)
 $$
 
-$\alpha^{\text{(l,m)}}_{\text{ij}}$ 는 head m에서 node i와 j 간의 attention coefficition 값이고 $W^{\text{(lm)}}$ 은 head m에서의 learnable weight 값이다.
+$\alpha_{ij}^{(\ell,m)}$는 head $m$에서 node $i$와 $j$ 간의 attention coefficient 값이고 $W^{(\ell,m)}$은 head $m$에서의 learnable weight 값이다.
 
-$\bigg\|_{m=1}^{H_\ell}$ 은 $H_l$ attention head들의 output을 모두 concatenate한 것이다.
+$\mathop{\Big\|}_{m=1}^{H_\ell}$은 $H_\ell$ attention head들의 output을 모두 concatenate한 것이다.
 
 즉, object i의 embedding은 우선 graph 상에서 object i의 모든 이웃 j을 찾고 각 이웃들의 feature을 $Wh_j$ 으로 projection한다.
 
@@ -100,12 +99,12 @@ Object i가 이웃 j들과 얼만큼의 관련성이 있는지를 알아내기 �
 
 2 layered Graph Attention Network에서 첫 번째 layer는 head 4개를 사용하고 두 번째 layer는 head 1개만 사용하는데 이는 처음에는 다양한 관점으로 주변 정보를 모으고 두 번째 layer에서 이 feature을 하나의 embedding으로 통합시키기 위함이다.
 
-> Graph Attention Network의 한 layer에서 각 head가 $z_i^{(\ell,m)} \in \mathbb{R}^d$ 을 출력한다면 $\mathop{\Big\|}_{m=1}^{H_\ell} z_i^{(\ell,m)} = \left[ z_i^{(\ell,1)} ; z_i^{(\ell,2)} ; \dots ; z_i^{(\ell,H_\ell)} \right] \in \mathbb{R}^{H_\ell d}$ 이 되는 것이다.
+> Graph Attention Network의 한 layer에서 각 head가 $z_i^{(\ell,m)} \in \mathbb{R}^d$를 출력한다면 $\mathop{\Big\|}_{m=1}^{H_\ell} z_i^{(\ell,m)} = \left[z_i^{(\ell,1)}; z_i^{(\ell,2)}; \ldots; z_i^{(\ell,H_\ell)}\right] \in \mathbb{R}^{H_\ell d}$가 되는 것이다.
 
 전체 graph representation (global mean pool)은 다음처럼 얻어진다.
 
 $$
-F = \frac{1}{|V|} \sum_{i \in V} h_i^{(2)}
+F = \frac{1}{\lvert V \rvert} \sum_{i \in V} h_i^{(2)}
 $$
 
 즉, graph을 구성하는 노드들의 평균 embedding으로 전체 graph을 구성하게 하였다.
@@ -116,7 +115,7 @@ $$
 
 Action expert가 개별 skill을 학습할 때 scene graph features F, skill description P, robot state Q에 대해 condition 되어 random Gaussian noise가 정답 demonstration action $A_t$가 되도록 denoising하는 방향으로 학습을 한다. 
 
-수식으로 설명하면 action expert가 $\epsilon_{\theta}$ 는 Gaussian noise $A^{K}_t$ 에서 시작해서 K번의 iteration을 통해서 정답 action $A^0_t$가 되도록 학습을 하는 것이다.
+수식으로 설명하면 action expert $\epsilon_{\theta}$는 Gaussian noise $A^{K}_t$에서 시작해서 $K$번의 iteration을 통해 정답 action $A^0_t$가 되도록 학습하는 것이다.
 
 $$
 A_{t}^{k-1}
@@ -146,7 +145,7 @@ $$
 $\epsilon_{\theta}$ 은 학습 objective function으로는 k-th iteration에 noise $\epsilon^k$ 을 정답 action $A^0_t$ 에 넣고 noise $\epsilon^k$ 을 예측하도록 하는 MSE을 사용한다
 
 $$
-L
+\mathcal{L}
 =
 \operatorname{MSE}
 \left(
@@ -169,13 +168,13 @@ Q
 \right).
 $$
 
-이때 $\bar{\alpha}_{k}$ 와 $\bar{\beta}_{k}$ 는 noise scheduler이다. End to end으로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
+이때 $\bar{\alpha}_{k}$와 $\bar{\beta}_{k}$는 noise scheduler이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
 
 ### Test time skill composition
 
 실제 inference에서는 VLM이 long horizon task을 여러 subgoal S으로 나누고 각 subgoal마다 연관된 object을 파악한다. 각 observation마다 SAM은 각 object의 point cloud을 얻고 VLM은 각 object 간의 semantic relationship을 얻어낸다. 이 정보들을 바탕으로 각 subgoal마다 dynamic한 sub-scene graph가 생기고 이 graph는 GNN을 통해서 feature embedding으로 변한다. 
 
-![joowan1108]({{site.url}}/images/papers/composebyfocus/figure2a.PNG)
+![joowan1108]({{site.url}}/images/papers/composebyfocus/figure2b.PNG)
 
 그 다음 action expert는 위 그림처럼 graph feature와 subgoal description에 condition 되어 subgoal에 맞는 action을 생성한다.
 
@@ -224,7 +223,7 @@ the blue cube remains inside이다.
 
 5. Obstacle Avoidance
 
-    큐브를 pull할 때 빙해물이 있다면, 대각선으로 pull을 해서 부딪치는 것을 방지해야 한다와 같이 복잡한 atomic skill이 요구된다. 평가할 때는 pull one cube back with red tool and push another cube away with yellow tool, while avoiding the obstacles 라는 task을 준다.
+    큐브를 pull할 때 방해물이 있다면, 대각선으로 pull해서 부딪치는 것을 방지해야 하는 것과 같이 복잡한 atomic skill이 요구된다. 평가할 때는 pull one cube back with red tool and push another cube away with yellow tool, while avoiding the obstacles라는 task를 준다.
 
     ![joowan1108]({{site.url}}/images/papers/composebyfocus/figure5.PNG)
 
@@ -234,7 +233,7 @@ the blue cube remains inside이다.
 
 이 비교 대상을 통해 구조화된 scene 정보 (scene graph)가 general한 skill composition에서 효과적이라는 것을 증명하고자 한다.
 
-각 모데들을 각 long horizon task에서 50개의 random seeds (initial positions)에서의 성공률으로 평가한다.
+각 모델을 각 long-horizon task에서 50개의 random seeds (initial positions)에 대한 성공률로 평가한다.
 
 
 #### Results
@@ -257,13 +256,13 @@ Scene graph 기반 모델 성능을 보면 skill composition task와 atomic task
 
 1. Behavior cloning에서 visual perturbations에 대한 민감성
 
-    2D, 3D 기반 policy들은 평가를 할 때 scene에 기존에 없던 distrubations가 생기면 이상한 행동을 보인다
+    2D, 3D 기반 policy들은 평가할 때 scene에 기존에 없던 distractors가 생기면 이상한 행동을 보인다.
 
 2. Skill composition에서 data scaling은 제한적인 효과를 보인다
 
     $\pi_0$ 는 pretrain될 때 엄청 많은 데이터를 사용하고 atomic skill dataset으로 finetune되어도 skill composition task에서 좋지 않은 성능을 보여준다는 것을 통해서 skill composition에서 data scaling의 효과가 크지 않다는 것을 보여준다.
 
-3. Domain adaption 문제
+3. Domain adaptation 문제
 
     기존 Behavior cloning을 통해서 skill composition (long horizon task)이 가능하기 위해서는 atomic skill들의 모든 조합을 학습해야 한다. 즉, long horizon task들을 하기 위해서 각 long horizon task들의 demonstration이 필요하다. 하지만 Human manipulation 데이터는 매우 비싸기 때문에 이런 방법은 비효율적이고 cost effective 하지 않다. 반면에 개별적인 skill을 behavior cloning으로 학습하고 VLM/LLM의 추론 능력을 이용하면 generalization 성능이 더 좋아진다고 주장한다. 
 
@@ -310,7 +309,7 @@ Scene graph와 $\pi_0$은 좋은 결과를 보여주지만 2D,3D diffusion polic
 
 **Skill Composition Evaluation**
 
-![joowan1108]({{site.url}}/images/papers/composebyfocus/figure1_bottom.PNG)
+![joowan1108]({{site.url}}/images/papers/composebyfocus/figure1bottom.PNG)
 
 여러 야채들과 distractors들이 존재할 때, Pick up all vegetables and put them in the
 basket을 하도록 하였다. Substeps는 ChatGPT (VLM)으로 생성하였다. ex: "1. Pick up the corn and put it in the basket. 2. Pick up the carrot and put it in the basket"
