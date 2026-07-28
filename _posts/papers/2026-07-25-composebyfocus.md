@@ -49,7 +49,7 @@ Task and Motion Planning에서는 discrete + continuous planning을 합쳐서 hi
 
 Imitation learning은 조작 관련된 policy을 학습하는데 효과적으로 알려져있다. 이 중에서 visual imitation learning은 policy가 2D image을 통해서 적절한 추론과 action을 하게 만드는 방법이다. 
 
-하지만 이런 방법은 공간적 정보가 부족하다. 이런 문제점으로 인해서 3/4D 이미지를 사용하는 방법도 나왔지만 여전히 추론과 관계를 짓는 능력이 부족하다.
+하지만 이런 방법은 공간적 정보가 부족하다. 이런 문제점으로 인해 3D 또는 동적인 4D scene representation을 사용하는 방법도 나왔지만 여전히 객체 간 관계를 명시적으로 표현하는 능력이 부족하다.
 
 # Compose By Focus
 
@@ -59,7 +59,7 @@ Imitation learning은 조작 관련된 policy을 학습하는데 효과적으로
 
 본 논문은 long horizon task에서 skill들을 조합해서 해결하는 방법에 대해 탐구한다. 
 
-학습 데이터는 개별적인 skill에 대한 expert demonstration으로 한다. (ex: 사과를 그릇에 담기, cube를 당기기) 이때 skill을 정의할 때 "pick", "place"처럼 단순하고 기본적인 단어가 아니라 task 문맥으로 정의하였다. 또, skill demonstration에서 distractors가 없도록 하였다. (어차피 scene graph로 task에 맞는 object만 보게 할 것이므로)
+학습 데이터는 개별적인 skill에 대한 expert demonstration으로 한다. (ex: 사과를 그릇에 담기, cube를 당기기) 이때 skill을 정의할 때 "pick", "place"처럼 고정된 primitive가 아니라 task 문맥을 포함한 short-term goal로 정의하였다. 각 atomic skill은 단독으로 수행되는 demonstration만으로 학습하며, 여러 skill이 조합된 cluttered scene의 demonstration은 학습에 사용하지 않는다.
 
 Observations $O$, scene graph $G$, skill 설명들을 $L$, action space를 $A$라고 할 때 visuomotor policy $\pi : (G,L) \rightarrow A$가 학습되어 모든 atomic skill들을 수행하도록 하는 것이다.
 
@@ -69,13 +69,13 @@ Observations $O$, scene graph $G$, skill 설명들을 $L$, action space를 $A$�
 
 demonstration의 RGB 이미지와 depth 이미지가 있다고 할 때, depth 이미지는 point clouds으로 바꾸고 gripper의 point clouds는 존재한다고 가정한다. 
 
-각 skill은 skill을 설명하는 언어 지시사항과 skill과 관련 있는 object $B$와 pairing한다.
+각 skill은 skill과 관련 있는 object $B$를 명시하는 언어 지시사항과 pairing한다.
 
 이미지로부터 object level의 정보를 얻기 위해서 vision foundation 모델을 사용하여 task와 관련있는 object만 보게 하기 위해 필요한 mask을 얻고 이 object들의 point clouds을 얻는다. 
 
 이 point clouds는 farthest point sampling을 통해서 encoder로 vector representation이 변환된다. 각 object embedding은 scene graph의 노드를 구성하게 된다.
 
-Graph의 edges는 RGB 이미지와 VLM을 통해 뽑아낸 object 간의 역학적 관계 정보가 되게 하였다. (grasp, next, inside) 
+Graph의 edge는 RGB 이미지와 VLM을 통해 추론한 object 간의 semantic·spatial relation을 나타낸다. (grasp, next, inside)
 
 ![joowan1108]({{site.url}}/images/papers/composebyfocus/figure3.PNG)
 
@@ -91,9 +91,9 @@ $$
 
 $\alpha_{ij}^{(\ell,m)}$는 head $m$에서 node $i$와 $j$ 간의 attention coefficient 값이고 $W^{(\ell,m)}$은 head $m$에서의 learnable weight 값이다.
 
-수식의 $\Vert$ 기호는 $H_\ell$ attention head들의 output을 모두 concatenate하는 연산을 의미한다.
+수식의 $\Vert$ 기호는 $H_{\ell}$ 개의 attention head들의 output을 모두 concatenate하는 연산을 의미한다.
 
-즉, object i의 embedding은 우선 graph 상에서 object i의 모든 이웃 j을 찾고 각 이웃들의 feature을 $Wh_j$ 으로 projection한다.
+즉, object i의 embedding을 얻기 위해서 우선 graph 상에서 object i의 모든 이웃 j을 찾는다. 그 다음, 각 이웃들의 feature을 $Wh_j$ 으로 projection한다.
 
 Object i가 이웃 j들과 얼만큼의 관련성이 있는지를 알아내기 위해 이들 간의 attention을 통해서 $\alpha_{\text{ij}}$ 을 얻는다. 이 attention 가중치 값을 통해서 weight sum을 구해 object i의 representation을 새로 얻는 것이다. 이때 multi head attention을 사용해서 head마다 중요하다고 생각하는 것이 달라지기에 각 head의 output들을 모두 concatenate 한 것이다. 
 
@@ -175,19 +175,15 @@ Q
 \right).
 $$
 
-$$
-\bar{\alpha}_{k}, \bar{\beta}_{k}
-$$
-
-이 두 계수는 noise scheduler이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
+$\bar{\alpha}_{k}, \bar{\beta}_{k}$ 이 두 계수는 noise scheduler이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
 
 ### Test time skill composition
 
-실제 inference에서는 VLM이 long horizon task을 여러 subgoal S으로 나누고 각 subgoal마다 연관된 object을 파악한다. 각 observation마다 SAM은 각 object의 point cloud을 얻고 VLM은 각 object 간의 semantic relationship을 얻어낸다. 이 정보들을 바탕으로 각 subgoal마다 dynamic한 sub-scene graph가 생기고 이 graph는 GNN을 통해서 feature embedding으로 변한다. 
+실제 inference에서는 VLM이 long horizon task를 여러 subgoal $S$로 나누고 각 subgoal마다 연관된 object를 파악한다. 각 observation마다 Grounded SAM으로 관련 object를 segmentation한 뒤 depth 정보를 이용해 point cloud를 얻고, VLM은 object 간의 semantic relationship을 추론한다. 이 정보들을 바탕으로 각 subgoal마다 dynamic sub-scene graph가 만들어지고 이 graph는 GNN을 통해 feature embedding으로 변한다.
 
 ![joowan1108]({{site.url}}/images/papers/composebyfocus/figure2b.PNG)
 
-그 다음 action expert는 위 그림처럼 graph feature와 subgoal description에 condition 되어 subgoal에 맞는 action을 생성한다.
+그 다음 action expert는 위 그림처럼 graph feature와 subgoal description에 condition 되어 subgoal에 맞는 action을 생성한다. 단, test time에 필요한 atomic skill 자체는 모두 training에서 학습된 것으로 가정한다.
 
 ## Experiment
 
@@ -244,7 +240,7 @@ the blue cube remains inside이다.
 
 이 비교 대상을 통해 구조화된 scene 정보 (scene graph)가 general한 skill composition에서 효과적이라는 것을 증명하고자 한다.
 
-각 모델을 각 long-horizon task에서 50개의 random seeds (initial positions)에 대한 성공률로 평가한다.
+각 모델을 각 long-horizon task에서 50개의 random seeds (initial positions)로 평가한다. 각 trial의 점수는 완료한 sub-skill의 비율이며, 논문은 이 점수의 평균을 보고한다.
 
 
 #### Results
@@ -269,9 +265,9 @@ Scene graph 기반 모델 성능을 보면 skill composition task와 atomic task
 
     2D, 3D 기반 policy들은 평가할 때 scene에 기존에 없던 distractors가 생기면 이상한 행동을 보인다.
 
-2. Skill composition에서 data scaling은 제한적인 효과를 보인다
+2. 대규모 pretraining만으로는 이 실험의 distribution shift를 해결하지 못한다
 
-    $\pi_0$ 는 pretrain될 때 엄청 많은 데이터를 사용하고 atomic skill dataset으로 finetune되어도 skill composition task에서 좋지 않은 성능을 보여준다는 것을 통해서 skill composition에서 data scaling의 효과가 크지 않다는 것을 보여준다.
+    $\pi_0$는 대규모 데이터로 pretraining되고 atomic skill dataset으로 finetuning되었지만 이 논문의 skill composition task에서는 좋지 않은 성능을 보였다. 따라서 이 실험에서는 대규모 pretraining만으로 atomic-skill 학습 환경과 compositional scene 사이의 visual distribution shift를 충분히 해결하지 못했음을 보여준다.
 
 3. Domain adaptation 문제
 
