@@ -86,12 +86,12 @@ Sub-scene graph를 얻은 뒤에 2-layered Graph Attention Network를 통해서 
 각 GAT layer $l$에서 node feature들은 다음과 같은 방법으로 update 된다.
  
 $$
-h_i^{(\ell+1)} = \sigma_\ell \left( \mathop{\Big\|}_{m=1}^{H_\ell} \sum_{j \in \mathcal{N}(i)} \alpha_{ij}^{(\ell,m)} W^{(\ell,m)} h_j^{(\ell)} \right)
+h_i^{(\ell+1)} = \sigma_\ell \left( \mathop{\Big\Vert}_{m=1}^{H_\ell} \sum_{j \in \mathcal{N}(i)} \alpha_{ij}^{(\ell,m)} W^{(\ell,m)} h_j^{(\ell)} \right)
 $$
 
 $\alpha_{ij}^{(\ell,m)}$는 head $m$에서 node $i$와 $j$ 간의 attention coefficient 값이고 $W^{(\ell,m)}$은 head $m$에서의 learnable weight 값이다.
 
-$\mathop{\Big\|}_{m=1}^{H_\ell}$은 $H_\ell$ attention head들의 output을 모두 concatenate한 것이다.
+수식의 $\Vert$ 기호는 $H_\ell$ attention head들의 output을 모두 concatenate하는 연산을 의미한다.
 
 즉, object i의 embedding은 우선 graph 상에서 object i의 모든 이웃 j을 찾고 각 이웃들의 feature을 $Wh_j$ 으로 projection한다.
 
@@ -99,7 +99,14 @@ Object i가 이웃 j들과 얼만큼의 관련성이 있는지를 알아내기 �
 
 2 layered Graph Attention Network에서 첫 번째 layer는 head 4개를 사용하고 두 번째 layer는 head 1개만 사용하는데 이는 처음에는 다양한 관점으로 주변 정보를 모으고 두 번째 layer에서 이 feature을 하나의 embedding으로 통합시키기 위함이다.
 
-> Graph Attention Network의 한 layer에서 각 head가 $z_i^{(\ell,m)} \in \mathbb{R}^d$를 출력한다면 $\mathop{\Big\|}_{m=1}^{H_\ell} z_i^{(\ell,m)} = \left[z_i^{(\ell,1)}; z_i^{(\ell,2)}; \ldots; z_i^{(\ell,H_\ell)}\right] \in \mathbb{R}^{H_\ell d}$가 되는 것이다.
+> Graph Attention Network의 한 layer에서 각 head가 $z_i^{(\ell,m)} \in \mathbb{R}^d$를 출력한다면 다음과 같다.
+>
+> $$
+> \mathop{\Big\Vert}_{m=1}^{H_\ell} z_i^{(\ell,m)}
+> =
+> \left[z_i^{(\ell,1)}; z_i^{(\ell,2)}; \ldots; z_i^{(\ell,H_\ell)}\right]
+> \in \mathbb{R}^{H_\ell d}
+> $$
 
 전체 graph representation (global mean pool)은 다음처럼 얻어진다.
 
@@ -168,7 +175,11 @@ Q
 \right).
 $$
 
-이때 $\bar{\alpha}_{k}$와 $\bar{\beta}_{k}$는 noise scheduler이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
+$$
+\bar{\alpha}_{k}, \bar{\beta}_{k}
+$$
+
+이 두 계수는 noise scheduler이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
 
 ### Test time skill composition
 
