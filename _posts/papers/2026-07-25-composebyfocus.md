@@ -175,7 +175,7 @@ Q
 \right).
 $$
 
-$\bar{\alpha}_{k}, \bar{\beta}_{k}$ 이 두 계수는 noise scheduler이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
+$\bar{\alpha}_{k}$와 $\bar{\beta}_{k}$는 noise scheduler의 계수이다. End-to-end로 point cloud encoder, graph encoder, diffusion model (action expert)을 학습한다.
 
 ### Test time skill composition
 
