@@ -342,3 +342,12 @@ Tool usage task을 실제 상황에서도 평가하였다. 막대 두 개와 두
 ![joowan1108]({{site.url}}/images/papers/composebyfocus/figure8.PNG)
 
 
+
+# 나의 주제
+
+개별적인 skill을 학습할 때 task relevant object만을 보면서 학습을 하면 long horizon task에서 sub task별로 나누면서 해도 skill들을 수행하면서 생기는 distributional shift 문제를 해결할 수 있다.
+
+Compose by Focus는 이 문제를 3d graph representation으로 해결을 하지만 subgoal마다 graph representation을 만들기 / LLM 호출하기 등은 long horizon task 수행 시간을 너무 길게 만든다.
+
+따라서 해야 하는 것은 더 간단하게 camera 정보를 이용하여 task relevant objects을 얻어낼 것인지.
+
