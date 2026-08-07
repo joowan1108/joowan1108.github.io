@@ -93,13 +93,13 @@ $$
 더 자세하게는 이 abstraction은 fixed high dimensional embedding $Z_{\sigma} \in \mathbb{R}^d$ 으로 mapping되고 이 embedding을 통해서 skill router는 적절한 expert을 고르는 것이다. K가 expert의 수라고 할 때, skill router가 각 expert에 주는 점수 (probabilirt distribution)은 다음과 같다.
 
 $$
-w_k = \text{Router} (Z_{\sigma}), k \in {1,2, ..., K}
+w_k = \text{Router}(Z_{\sigma}), \qquad k \in \{1,2,\ldots,K\}
 $$
 
 이 다음 제일 점수가 높은 expert만 선택되고 최종 action chunk $A_t$는 weighted combination으로 예측된다. 
 
 $$
-F_{\text{out}} = (1-w_k) \dot F_{\text{share}}(x_t) + w_k \dot F_k(x_t)
+F_{\text{out}} = (1-w_k) \cdot F_{\text{share}}(x_t) + w_k \cdot F_k(x_t)
 $$
 
 > 이때 $x_t$는 현재 multimodal input $ \left[ O^{\text{1:n}}_t, l, s_t \right]$ 이다.
@@ -119,7 +119,7 @@ $$
 x을 hiddens tate 벡터, $W_1$ 은 gate을 계산하기 위한 projection, $W_3$ 은 value을 계산하기 위한 projection, $W_2$ 는 차원을 맞춰주는 projection이다. 
 
 $$
-\text{SwiGLU(x)} = W_2 (\text{SiLU}(W_1x) \dot W_3x)
+\operatorname{SwiGLU}(x) = W_2\left(\operatorname{SiLU}(W_1x) \odot W_3x\right)
 $$
 
 여기서 gate을 계산한다는 것은 특정 feature을 얼마나 강하게 사용할 지 그리고 value을 계산한다는 것은 어떤 feature를 사용할 것인지를 결정하는 것이라고 생각하면 된다. 
