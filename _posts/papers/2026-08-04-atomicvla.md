@@ -62,7 +62,7 @@ VLA 분야에서는 개별 skill을 학습하는 것이 아니라 generalize 능
 
 본 논문은 robot policy가 task planning과 action execution을 동시에 할 수 있게 하고 어떤 modality / 무엇을 output 할지 자동으로 결정하게 하는 방법에 대해서 연구한다. 
 
-예를 들어 thinking mode에 들어갔을 때 policy는 여러 camera input $O^{1:n}_t$ 와 language instruction $l$ 을 받으면 high level task plan $\left[ C_{0-k}, C_t, \sigma \right]$ 을 text으로 출력한다. 반면 acting mode에 들어가면 policy는 가장 최근의 planning output $\sigma$ 와 proprioceptive state $S_t$ 을 바탕으로 actions을 생성한다.
+예를 들어 thinking mode에 들어갔을 때 policy는 여러 camera input $O^{1:n}_t$ 와 language instruction $l$ 을 받으면 high level task plan $[ C_{0-k}, C_t, \sigma ]$ 을 text으로 출력한다. 반면 acting mode에 들어가면 policy는 가장 최근의 planning output $\sigma$ 와 proprioceptive state $S_t$ 을 바탕으로 actions을 생성한다.
 
 하나의 policy 내부에서 이런 switching이 가능하도록 하기 위해 두 개의 special output tokens "think"와 "act"을 사용한다. $O^{1:n}_t$ 와 $l$ 이 주어졌을 때 model은 우선 현재가 "think"을 해야 하는 단계인지 "act"을 해야 하는 단계인지 파악한 뒤, "think" token을 출력하면 thinking mode에 들어가서 task chain $C_{0-k}$, 현재까지의 progress $C_t$, 그리고 실행해야 하는 atomic skill abstraction $\sigma$ 을 츨력한다.
 
@@ -74,7 +74,7 @@ VLA 분야에서는 개별 skill을 학습하는 것이 아니라 generalize 능
 
 Skill library의 atomic skill embedding을 생성하기 위해서 diffusion denoising model에서 noise scheduling에서 영감을 얻은 방법을 사용했다고 한다.
 
-각 atomic skill을 $\sigma \in \left[ 0,100 \right]$ 에 mapping한 뒤에 high dimensional vector $Z_{\sigma}$ 에 embedding한다. Embedding을 통해서 semantic한 separation을 가능하게 하고 skill specific experts에게 routing이 가능하도록 한다. 
+각 atomic skill을 $\sigma \in [ 0,100]$ 에 mapping한 뒤에 high dimensional vector $Z_{\sigma}$ 에 embedding한다. Embedding을 통해서 semantic한 separation을 가능하게 하고 skill specific experts에게 routing이 가능하도록 한다. 
 
 $$
 Z_{\sigma} = E(norm(\log(\sigma)))
@@ -119,7 +119,7 @@ $$
 x을 hiddens tate 벡터, $W_1$ 은 gate을 계산하기 위한 projection, $W_3$ 은 value을 계산하기 위한 projection, $W_2$ 는 차원을 맞춰주는 projection이다. 
 
 $$
-\operatorname{SwiGLU}(x) = W_2\left(\operatorname{SiLU}(W_1x) \odot W_3x\right)
+\operatorname{SwiGLU}(x) = W_2(\operatorname{SiLU}(W_1x) \odot W_3x)
 $$
 
 여기서 gate을 계산한다는 것은 특정 feature을 얼마나 강하게 사용할 지 그리고 value을 계산한다는 것은 어떤 feature를 사용할 것인지를 결정하는 것이라고 생각하면 된다. 
