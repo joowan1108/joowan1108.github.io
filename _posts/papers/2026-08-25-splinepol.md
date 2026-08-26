@@ -16,7 +16,7 @@ use_math: true
 
 Imitation learning은 robot policy 학습의 central paradigm이다. 이 방법을 적용하는 policy model로는 ACT, Diffusion, Flow matching 등이 존재한다. 이때 이 방법을 모두 action chunk으로 행동을 생성하는데 이때 action chunk는 어떻게 보면 "fixed" horizon sequence이다. 즉, 시간 측면에서는 discrete하다. 또, 이렇게 생성된 action chunk는 structured하지 않고 temporal 특징이 없다. 따라서, 연속성, 속도, boundary conditions가 존재하지 않는다. 
 
-이와 동시에 motion을 구고적으로 표현하기 위해 motion primitive이라는 표현 방법이 존재한다. Motion primitive는 구조를 표현하는 parameter들을 사용하여 control, 최적화, trajectory editing이 가능하게 만든다.
+이와 동시에 motion을 구조적으로 표현하기 위해 motion primitive이라는 표현 방법이 존재한다. Motion primitive는 구조를 표현하는 parameter들을 사용하여 control, 최적화, trajectory editing이 가능하게 만든다.
 
 본 논문은 이를 바탕으로 multimodal behavior learning 및 perception을 잘 처리하는 imitation learning과 구조적으로 motion을 표현할 수 있는 motion primitive의 장점을 모두 가진 policy을 만들어보고자 한 것이다. 이 poliocy를 spline policy라고 한다.
 
