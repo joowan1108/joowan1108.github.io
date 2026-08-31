@@ -190,7 +190,7 @@ Flow field realization의 핵심은 내 생각에는 state dependent correction�
 
 Flow field realization에서도 observation의 불확실성을 토대로 flow field의 불확실성을 알아낼 수 있다. 이때 Flow field $F_{\theta}(x)$ 은 normal direction, tangential progession의 합으로 인해 observation으로부터 linear한 transformation이 아니기에 **Monte Carlo Sampling**으로 flow field의 분포를 예측해야 한다.
 
-Monte Carlo Sampling이란 불확실한 분포로부터 여러 sample을 뽑아내서 분포를 직접 구하는 방법이다. Observation 분포가 불확실하다고 가정을 함으로 이 방법론을 적용할 수 있다. Observation 분포로부터 여러 samples ${o^{(m)}\}_{m=1}^M$ 을 뽑아서 spline parameters $w_\theta(o^{(m)})$ 와 decoded splines $f_\theta^{(m)}$ 을 얻었다고 하자. 각 sample된 spline으로 flow field을 얻는다고 할 때 그럼 flow field의 분포는 다음처럼 된다.
+Monte Carlo Sampling이란 불확실한 분포로부터 여러 sample을 뽑아내서 분포를 직접 구하는 방법이다. Observation 분포가 불확실하다고 가정을 함으로 이 방법론을 적용할 수 있다. Observation 분포로부터 여러 samples ${o^{(m)}}_{m=1}^M$ 을 뽑아서 spline parameters $w_\theta(o^{(m)})$ 와 decoded splines $f_\theta^{(m)}$ 을 얻었다고 하자. 각 sample된 spline으로 flow field을 얻는다고 할 때 그럼 flow field의 분포는 다음처럼 된다.
 
 $$\mu_F(x) = \frac{1}{M} \sum_{m=1}^M F_\theta^{(m)}(x)$$
 
