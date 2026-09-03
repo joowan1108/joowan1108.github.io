@@ -30,18 +30,19 @@ Robot의 실시간 action을 예측하는 AI를 만들기 위해서 보통 시�
 
 **Naiive Discretization**
 
+Action chunk의 한 action을 하나의 token으로 변환해서 action chunk을 여러 개의 discrete한 action token으로 표현하는 방법이다.
 
+Cross entropy loss을 사용해서 Next token prediction처럼 학습이 되는데 language model의 본래 training objective와 동일한 objective을 사용하기 때문에 objective 간의 gap이 발생하지 않는다.
 
-Temporal action abstractions
+하지만 action sequence가 매우 길어질 수 있어서 학습 및 추론 속도가 매우 오래 걸린다.
 
+**Temporal action abstractions**
 
+FAST tokenizer처럼 여러 timestep의 action 정보를 시간에 대해서 압축시켜서 문제를 완화하는 방법이다. 즉, 동일한 autoregressive objective을 사용하되, VLM이 예측해야 하는 token sequence 길이를 줄이는 것이다.
 
+**Diffusion and flow matching**
 
-Diffusion and flow matching
-
-
-State representations
-
+Autoregressive 방법에서 벗어나서 직접 continuous한 action을 직접 생성하는 것이다. 
 
 
 
@@ -87,20 +88,50 @@ $$\mathcal{L}_{\text{CO-VLA}}(\theta) = \mathbb{E}_{\mathcal{D}, \tau, \omega} \
 
 ## Knowledge Insulation & Gradient Flow
 
-이 co-training을 할 때 random initialize된 action expert의 gradient가 VLM까지 back propagate 되면 image encoder와 language model backbone 성능이 저하된다고 한다. 
+이 co-training을 할 때 random initialize된 action expert의 gradient가 VLM까지 back propagate 되면 image encoder와 language model backbone 성능이 저하된다고 한다. 따라서 action expert의 gradient가 backbone에 흘러가지 않도록 stop gradient을 적용한다. 
+
+이 stop gradient가 적용되기 위해서 VLM의 representaton와 Action expert이 상호작용하는 flow matching 과정에서의 attention operation을 수정한다.
+
+일반적인 Attention weight을 구할 때 X를 attention layer의 input이라고 할 때 다음 식을 사용한다.
+
+$$P = \text{softmax}\left(Q(X)K(X)^T + A\right) = \begin{pmatrix} P_{bb} & 0 \\ P_{ab} & P_{aa} \end{pmatrix}$$
+
+> 이때 A는 attnetion mask이다.
+
+$P_{bb}$ 는 VLM token이 다른 VLM token을 보는 attention weight, $P_{ab}$ 는 Action expert token이 VLM token을 보는 attention weight, $P_{aa}$ 는 Action expert token끼리 보는 attention weight 이다. 이때 Attention에서 action expert의 token이 query로 작동하기 때문에 VLM token이 action expert token을 보는 weight는 존재하지 않다.
+
+여기서 X를 $X_a$ : Action expert token과 $X_b$ : VLM backbone token 으로 정의하면 stop gradient을 다음처럼 attention 과정에서 표현할 수 있다. 
+
+$$\begin{pmatrix} P_{bb} & 0 \\ P_{ab} & P_{aa} \end{pmatrix} = \text{softmax} \left( \begin{pmatrix} Q_b(X_b)K_b(X_b)^T & 0 \\ Q_a(X_a)\text{sg}(K_b(X_b))^T & Q_a(X_a)K_a(X_a)^T \end{pmatrix} + A \right)$$
+
+이때 sg는 stop gradient operator으로 action expert가 VLM token을 사용할 때 이 부분에서 미분 과정에서 생기는 gradient가 VLM embedding에 흘러가지 않도록 해주는 역할을 한다. 
+
+따라서 최종 value embedding은 다음처럼 계산된다.
+
+$$E = \begin{pmatrix} E_b \\ E_a \end{pmatrix} = \begin{pmatrix} P_{bb} V_b(X_b) \\ P_{ab} \text{sg}\left(V_b(X_b)\right) + P_{aa} V_a(X_a) \end{pmatrix}$$
+
+즉, flow matching 과정의 attention을 통해서 생기는 것은 VLM representation의 self attention, Action expert token 간의 self attention, 그리고 stop gradient가 적용된 VLM representation과 action expert token 간의 cross attention이다.
+
+# Results
+
+Knowledge insulation 방법론은 우선 dextrous task에서 정밀하고 빠른 성능을 보여주었다.
+
+Language instruction에 따라 계속 물건을 치워야 하는 table bussing task에 대해서도 높은 성공률을 보여주었다.
+
+Stop gradient만 적용하지 않고 joint training만 했을 때는 language following 능력이 떨어졌지만 (70%) Stop gradient을 적용했을 때는 84% 성공률을 보여주었다.
+
+In distribution task에서와 out of distribution task (unseen object)에서 모두 80%~90%의 성능을 보이면서 stop gradient을 통해 VLM의 generalization 능력을 잃지 않았다고 주장한다.
 
 
+![joowan1108]({{site.url}}/images/papers/knowledgeinsulation/figure4.png)
 
+![joowan1108]({{site.url}}/images/papers/knowledgeinsulation/figure5.png)
 
+![joowan1108]({{site.url}}/images/papers/knowledgeinsulation/figure6.png)
 
+![joowan1108]({{site.url}}/images/papers/knowledgeinsulation/figure7.png)
 
-
-
-
-
-
-
-
+![joowan1108]({{site.url}}/images/papers/knowledgeinsulation/figure9.png)
 
 
 
