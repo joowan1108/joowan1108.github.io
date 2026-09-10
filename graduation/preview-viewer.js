@@ -1,23 +1,16 @@
-// preview-viewer.js — Canvas-based HWP/HWPX viewer for the Claude Code
-// preview pane. Vanilla-JS canvas renderer driven by rhwp WASM.
+// preview-viewer.js — Selectable SVG HWP/HWPX viewer.
+// Vanilla-JS page renderer driven by rhwp WASM.
 //
 // Key points to preserve when editing:
 //   - Set globalThis.measureTextWidth via a hidden <canvas> 2d context
 //     BEFORE initialising rhwp WASM. rhwp calls it during text layout.
-//   - Cap canvas pixel area at MAX_CANVAS_PIXELS so very large pages don't
-//     blow GPU memory.
-//   - In the render loop, run the full geometry sweep first
-//     (getPageInfo for every page), THEN the render loop. Doing them
-//     interleaved on the same doc handle leaks rhwp's internal borrow.
-//   - Each page's <canvas> is position:absolute inside a position:relative
-//     wrap sized in NATIVE page pixels. fit() updates only CSS width/height
-//     to scale the canvas pixel buffer down to the container — no
-//     re-rasterisation on resize.
-//   - Call doc.getPageTextLayout(i) AFTER each renderPageToCanvas. It's
-//     the side-effect that releases rhwp's per-page borrow; without it the
-//     next render panics "attempted to take ownership of Rust value while
-//     it was borrowed". We discard the payload — v0.10 doesn't surface a
-//     selectable text layer.
+//   - renderPageSvg() uses the same pagination/layout model as the canvas
+//     preview, but keeps glyphs as real SVG <text> nodes. That makes text
+//     selectable and copyable without rebuilding the thesis as loose HTML.
+//   - Page geometry is collected before rendering and fit() only changes
+//     CSS dimensions, preserving the native page coordinate system.
+//   - SVG is parsed and sanitised before it enters the document. Embedded
+//     images remain available, while executable or remote content is removed.
 
 // ── 1. measureTextWidth (must register BEFORE rhwp init) ──────────────────
 {
@@ -73,10 +66,8 @@ const state = {
   pageCount: 0,
   currentPage: 1,
   // Zoom multiplier on the fit-to-container baseline. 1.0 = fits the pane.
-  // CSS-scale only — canvas pixel buffer is set once in render(). Past ~1.5x
-  // upscaling becomes visible on standard-DPI screens; we accept that for
-  // now to keep slider drags instant. Re-rasterise on demand is a future
-  // refinement.
+  // CSS-scale only — the native SVG coordinate system stays unchanged while
+  // users get a larger readable page without rerendering the document.
   zoom: 1,
 };
 const ZOOM_MIN = 0.2;
@@ -126,14 +117,6 @@ function scrollToPage(n) {
 }
 
 // ── 6. Layout helpers ─────────────────────────────────────────────────────
-const MAX_CANVAS_PIXELS = 67_108_864; // ≈ 8192 × 8192
-function pickEffectiveDpr(pageW, pageH, zoom, rawDpr) {
-  const phys = pageW * zoom * rawDpr * pageH * zoom * rawDpr;
-  if (phys <= MAX_CANVAS_PIXELS) return rawDpr;
-  const limited = Math.sqrt(MAX_CANVAS_PIXELS / (pageW * zoom * pageH * zoom));
-  return Math.max(1, Math.floor(limited));
-}
-
 function fit() {
   const wraps = els.container.querySelectorAll(".hwp-page");
   if (wraps.length === 0) return;
@@ -144,9 +127,7 @@ function fit() {
   // as a final ceiling for pathological wide pages.
   let maxPageW = 0;
   wraps.forEach((wrap) => {
-    const canvas = wrap.querySelector("canvas");
-    if (!canvas) return;
-    const pw = parseFloat(canvas.dataset.pageWidth || "0");
+    const pw = parseFloat(wrap.dataset.pageWidth || "0");
     if (pw > maxPageW) maxPageW = pw;
   });
   const containerW = Math.max(0, els.container.clientWidth - 32);
@@ -157,18 +138,105 @@ function fit() {
   );
   const avail = baseAvail * state.zoom;
   wraps.forEach((wrap) => {
-    const canvas = wrap.querySelector("canvas");
-    if (!canvas) return;
-    const pageW = parseFloat(canvas.dataset.pageWidth || "0");
-    const pageH = parseFloat(canvas.dataset.pageHeight || "0");
+    const svg = wrap.querySelector("svg");
+    const textLayer = wrap.querySelector(".text-layer");
+    if (!svg) return;
+    const pageW = parseFloat(wrap.dataset.pageWidth || "0");
+    const pageH = parseFloat(wrap.dataset.pageHeight || "0");
     if (pageW <= 0 || pageH <= 0) return;
     const ratio = avail / pageW;
     const scaledH = pageH * ratio;
     wrap.style.width = `${avail}px`;
     wrap.style.height = `${scaledH}px`;
-    canvas.style.width = `${avail}px`;
-    canvas.style.height = `${scaledH}px`;
+    svg.style.width = `${avail}px`;
+    svg.style.height = `${scaledH}px`;
+    if (textLayer) {
+      textLayer.style.width = `${pageW}px`;
+      textLayer.style.height = `${pageH}px`;
+      textLayer.style.transform = `scale(${ratio})`;
+    }
   });
+}
+
+function safeSvgElement(markup) {
+  const parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
+  if (parsed.querySelector("parsererror")) {
+    throw new Error("SVG 렌더 결과를 해석할 수 없습니다.");
+  }
+
+  parsed.querySelectorAll("script, foreignObject").forEach((node) => node.remove());
+  parsed.querySelectorAll("*").forEach((node) => {
+    for (const attr of Array.from(node.attributes)) {
+      const name = attr.name.toLowerCase();
+      const value = attr.value.trim().toLowerCase();
+      if (name.startsWith("on")) node.removeAttribute(attr.name);
+      if ((name === "href" || name.endsWith(":href")) &&
+          !(value.startsWith("data:") || value.startsWith("#") || value.startsWith("blob:"))) {
+        node.removeAttribute(attr.name);
+      }
+    }
+  });
+
+  const svg = parsed.documentElement;
+  if (svg.localName !== "svg") throw new Error("올바른 SVG 페이지가 아닙니다.");
+  return document.importNode(svg, true);
+}
+
+function createTextLayer(layout, pageNum) {
+  const layer = document.createElement("div");
+  layer.className = "text-layer";
+  layer.dataset.pageNum = String(pageNum);
+  layer.setAttribute("role", "document");
+  layer.setAttribute("aria-label", `${pageNum}쪽 텍스트`);
+
+  for (const run of layout?.runs || []) {
+    if (!run.text) continue;
+    const span = document.createElement("span");
+    span.className = "text-run";
+    span.dataset.paraKey = `${run.secIdx ?? 0}:${run.paraIdx ?? 0}`;
+    span.textContent = run.text;
+    span.style.left = `${Number(run.x) || 0}px`;
+    span.style.top = `${Number(run.y) || 0}px`;
+    span.style.width = `${Math.max(0, Number(run.w) || 0)}px`;
+    span.style.height = `${Math.max(1, Number(run.h) || 1)}px`;
+    span.style.fontFamily = run.fontFamily || "serif";
+    span.style.fontSize = `${Math.max(1, Number(run.fontSize) || 12)}px`;
+    span.style.fontWeight = run.bold ? "700" : "400";
+    span.style.fontStyle = run.italic ? "italic" : "normal";
+    span.style.letterSpacing = `${Number(run.letterSpacing) || 0}px`;
+    layer.appendChild(span);
+  }
+  return layer;
+}
+
+function selectedTextFromLayers(selection) {
+  if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return "";
+  const range = selection.getRangeAt(0);
+  const spans = Array.from(document.querySelectorAll(".text-layer .text-run"))
+    .filter((span) => {
+      try { return range.intersectsNode(span); }
+      catch { return false; }
+    });
+  if (spans.length === 0) return "";
+
+  let result = "";
+  let previousParagraph = null;
+  for (const span of spans) {
+    const node = span.firstChild;
+    if (!node) continue;
+    let start = 0;
+    let end = node.textContent.length;
+    if (span.contains(range.startContainer)) start = range.startOffset;
+    if (span.contains(range.endContainer)) end = range.endOffset;
+    const piece = node.textContent.slice(start, end);
+    if (!piece) continue;
+
+    const paragraph = span.dataset.paraKey;
+    if (previousParagraph !== null && paragraph !== previousParagraph) result += "\n\n";
+    result += piece;
+    previousParagraph = paragraph;
+  }
+  return result;
 }
 
 function syncZoomUi() {
@@ -270,7 +338,7 @@ async function fetchLatest({ silent = false } = {}) {
 async function render() {
   if (!state.fileBytes) return;
 
-  // Tear down previous canvases + observer attachments.
+  // Tear down the previous page nodes and observer attachments.
   els.container.querySelectorAll(".hwp-page").forEach((n) => {
     pageObserver.unobserve(n);
     n.remove();
@@ -294,7 +362,7 @@ async function render() {
     state.currentPage = Math.min(state.currentPage || 1, state.pageCount);
     syncPageNav();
 
-    // Geometry first — every getPageInfo call before any renderPageToCanvas.
+    // Collect native page geometry before rendering the SVG pages.
     const geoms = [];
     for (let i = 0; i < state.pageCount; i++) {
       try {
@@ -306,50 +374,40 @@ async function render() {
       }
     }
 
-    const rawDpr = window.devicePixelRatio || 1;
-    const zoom = 1;
     const frag = document.createDocumentFragment();
     const wraps = [];
 
     for (let i = 0; i < state.pageCount; i++) {
       const { width: pageW, height: pageH } = geoms[i];
       if (pageW <= 0 || pageH <= 0) continue;
-      const dpr = pickEffectiveDpr(pageW, pageH, zoom, rawDpr);
-      const renderScale = zoom * dpr;
-
-      const canvas = document.createElement("canvas");
-      canvas.width = Math.round(pageW * renderScale);
-      canvas.height = Math.round(pageH * renderScale);
-      canvas.dataset.pageWidth = String(pageW);
-      canvas.dataset.pageHeight = String(pageH);
-      canvas.style.display = "block";
-      canvas.style.position = "absolute";
-      canvas.style.top = "0";
-      canvas.style.left = "0";
-      canvas.style.width = `${pageW}px`;
-      canvas.style.height = `${pageH}px`;
-      canvas.style.background = "#fff";
-
+      let svg;
+      let textLayout;
       try {
-        doc.renderPageToCanvas(i, canvas, renderScale);
+        svg = safeSvgElement(doc.renderPageSvg(i));
+        textLayout = JSON.parse(doc.getPageTextLayout(i));
       } catch (err) {
-        console.error(`[claw-hwp] renderPageToCanvas(${i}) failed:`, err);
+        console.error(`[graduation-viewer] renderPageSvg(${i}) failed:`, err);
         continue;
       }
 
-      // Always call getPageTextLayout (and discard) — without it rhwp keeps
-      // its internal borrow on the doc and the next render panics.
-      try { JSON.parse(doc.getPageTextLayout(i)); } catch {}
+      svg.setAttribute("aria-hidden", "true");
+      svg.style.display = "block";
+      svg.style.width = `${pageW}px`;
+      svg.style.height = `${pageH}px`;
+      svg.style.background = "#fff";
 
       const wrap = document.createElement("div");
       wrap.className = "hwp-page";
       wrap.dataset.pageNum = String(i + 1);
+      wrap.dataset.pageWidth = String(pageW);
+      wrap.dataset.pageHeight = String(pageH);
       wrap.style.position = "relative";
       wrap.style.background = "#fff";
       wrap.style.boxShadow = "0 1px 4px rgba(0, 0, 0, 0.45)";
       wrap.style.width = `${pageW}px`;
       wrap.style.height = `${pageH}px`;
-      wrap.appendChild(canvas);
+      wrap.appendChild(svg);
+      wrap.appendChild(createTextLayer(textLayout, i + 1));
       frag.appendChild(wrap);
       wraps.push(wrap);
     }
@@ -400,6 +458,20 @@ els.container.addEventListener("wheel", (e) => {
   setZoom(state.zoom + delta);
 }, { passive: false });
 syncZoomUi();
+
+// SVG keeps the page visually faithful, while this PDF.js-style DOM text
+// layer provides clean drag selection and clipboard text with paragraph
+// boundaries instead of one line break per SVG glyph.
+document.addEventListener("copy", (event) => {
+  const selection = window.getSelection();
+  const anchor = selection?.anchorNode;
+  const anchorElement = anchor?.nodeType === Node.ELEMENT_NODE ? anchor : anchor?.parentElement;
+  if (!anchorElement?.closest?.(".text-layer")) return;
+  const text = selectedTextFromLayers(selection);
+  if (!text) return;
+  event.preventDefault();
+  event.clipboardData?.setData("text/plain", text);
+});
 
 // ── 9. Heartbeat ──────────────────────────────────────────────────────────
 // While this tab is open, ping the server so it knows we're alive. When the
