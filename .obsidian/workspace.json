@@ -1,0 +1,196 @@
+{
+  "main": {
+    "id": "1113877941e865de",
+    "type": "split",
+    "children": [
+      {
+        "id": "fbb602f795308a8f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6556885c701c3d3b",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "images/papers/tacfilm/figure1.png"
+              },
+              "icon": "lucide-image",
+              "title": "figure1"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9346e91a2a03b67e",
+    "type": "split",
+    "children": [
+      {
+        "id": "fb90314f387b9c06",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3fc19fadebb8015a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "파일 탐색기"
+            }
+          },
+          {
+            "id": "4dbbf10f295db98e",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "검색"
+            }
+          },
+          {
+            "id": "38055e95c5a8e361",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "북마크"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "d62ee3adec9b5c01",
+    "type": "split",
+    "children": [
+      {
+        "id": "82990e958a790e1a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8e0a3339151e5635",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "images/papers/tacfilm/figure1.png",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "백링크"
+            }
+          },
+          {
+            "id": "32914aa4df39d590",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "images/papers/tacfilm/figure1.png",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "나가는 링크"
+            }
+          },
+          {
+            "id": "a3a79f95ad5deed4",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "태그"
+            }
+          },
+          {
+            "id": "cf98218854b1df0b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "모든 속성"
+            }
+          },
+          {
+            "id": "fd29189ae753d100",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "images/papers/tacfilm/figure1.png",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "개요"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:빠른 전환기 열기": false,
+      "graph:그래프 뷰 열기": false,
+      "canvas:새 캔버스 만들기": false,
+      "daily-notes:오늘의 일일 노트 열기": false,
+      "templates:템플릿 삽입": false,
+      "command-palette:명령어 팔레트 열기": false,
+      "bases:새 베이스 생성하기": false
+    }
+  },
+  "active": "6556885c701c3d3b",
+  "lastOpenFiles": [
+    "images/papers/tacfilm/figure2.png",
+    "images/papers/tacfilm/figure5.png",
+    "_posts/papers/2026-09-15-tacfilm.md",
+    "_posts/papers/2026-09-21-realtime.md"
+  ]
+}
