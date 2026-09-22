@@ -11,12 +11,14 @@
             "id": "6556885c701c3d3b",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "images/papers/tacfilm/figure1.png"
+                "file": "_posts/project/기존 방법 정리.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "figure1"
+              "icon": "lucide-file",
+              "title": "기존 방법 정리"
             }
           }
         ]
@@ -183,14 +185,32 @@
       "daily-notes:오늘의 일일 노트 열기": false,
       "templates:템플릿 삽입": false,
       "command-palette:명령어 팔레트 열기": false,
-      "bases:새 베이스 생성하기": false
+      "bases:새 베이스 생성하기": false,
+      "templater-obsidian:Templater": false
     }
   },
   "active": "6556885c701c3d3b",
   "lastOpenFiles": [
-    "images/papers/tacfilm/figure2.png",
-    "images/papers/tacfilm/figure5.png",
-    "_posts/papers/2026-09-15-tacfilm.md",
-    "_posts/papers/2026-09-21-realtime.md"
+    "Pasted image 20260922224421.png",
+    "Pasted image 20260922222817.png",
+    "Pasted image 20260922222458.png",
+    "Pasted image 20260922222454.png",
+    "CHANGELOG.md",
+    "Pasted image 20260922202958.png",
+    "Pasted image 20260922204936.png",
+    "_posts/papers/2026-09-11-vlatouch.md",
+    "_posts/project/기존 방법 정리.md",
+    "presentations/skill-composition-vla/preview-montage.png",
+    "Pasted image 20260922214159.png",
+    "Pasted image 20260922211329.png",
+    "Pasted image 20260922204948.png",
+    "_posts/papers/2026-09-22-aloha.md",
+    "_posts/project",
+    "templates",
+    "templates/template.md",
+    "_posts/papers/2026-09-21-realtime.md",
+    "_posts/papers/2026-09-08-tacvla.md",
+    "images/papers/tacfilm/figure1.png",
+    "_posts/papers/2026-09-15-tacfilm.md"
   ]
 }
