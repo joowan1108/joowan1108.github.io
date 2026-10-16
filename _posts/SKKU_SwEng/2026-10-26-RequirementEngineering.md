@@ -217,16 +217,49 @@ System requirements는 user requirements의 확장 버전으로 implementation�
 	- 각 sentence마다 하나의 requirement만 담는다
 	- 가장 많이 사용되지만 ambiguous하다
 	- highlighting을 사용해야 한다.
-	- 필수
+	- 필수와 필수 아닌것을 구분
+	- Assume 금지
+	- 근거를 작성해라 (**rationale**) : 10분마다 insulin을 측정해라만 적지말고 이유까지 : 자주 측정하는건 의미가 없다 혈당은 느리게 변한다
 - Structured natural language
 	- Template에 적혀있다
 	- 각 field는 requirement의 한 aspect을 담는다 
+	- 함수 / entity의 description
+	- input output description
+	- 수행해야 하는 action, precondition + post condition
+	- side effects 적기
+	- 예시로 tabular specifications가 있다
+		- Alternative situation이 존재할 때 (conditions가 많을 때) 효과적이다
+		- 상황마다 적용해야 하는 수식이 존재할 때도 효과적이다
 - Graphical notations
 	- Functional requirements을 담는다
 	- UML use case와 sequence diagram이 사용된다
+	- Use case는 user와 system 간의 interactions을 정의한다.
 - Mathematical specification
 	- Finite state machines가 사용된다.
 	- Unambiguous는 없어지지만 customers가 이해하기는 어렵다
 
 
+
+요구사항들을 다 정리한 document을 **SRS: Software Requirements Document**이라고 부른다
+
+Offical statement of what system developers should implement
+
+User와 system requirements을 모두 포함
+
+User가 다양하다
+
+- System Customers
+	- Requirements을 정의하고 needs와 맞는지 확인할 때 사용
+- Managers
+	- Development process을 미리 계획할 때 사용
+- System engineers
+	- Requirements을 사용해서 무슨 system을 구현하고자 하는지 이해할 때 사용
+- System Test engineers
+	- Requirements을 통해 validation test 생성
+- System Maintenance engineers
+	- System을 이해하고 parts들이 주고받는 relationship 이해
+
+![joowan1108]({{site.url}}/images/SKKU_SwEng/figure8.png)
+
+![joowan1108]({{site.url}}/images/SKKU_SwEng/figure9.png)
 
