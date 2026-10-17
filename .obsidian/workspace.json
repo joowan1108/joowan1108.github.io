@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/SKKU_SwEng/2026-10-26-RequirementEngineering.md",
+                "file": "_posts/SKKU_SwEng/2026-10-16-7DesignandImplementation.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-10-26-RequirementEngineering"
+              "title": "2026-10-16-7DesignandImplementation"
             }
           }
         ]
@@ -191,26 +191,34 @@
   },
   "active": "6556885c701c3d3b",
   "lastOpenFiles": [
-    "Pasted image 20261017000900.png",
-    "images/SKKU_SwEng/figure9.png",
-    "images/SKKU_SwEng/figure8.png",
-    "_posts/SKKU_SwEng/2026-10-16-AgileSoftwareDevelopment.md",
-    "_posts/SKKU_SwEng/2026-10-26-Introduction.md",
-    "_posts/SKKU_SwEng/2026-10-26-SoftwareProcess.md",
-    "_posts/SKKU_SwEng/2026-10-26-RequirementEngineering.md",
-    "images/SKKU_SwEng/figure7.png",
-    "images/SKKU_SwEng/figure6.png",
+    "images/SKKU_SwEng/figure44.png",
+    "images/SKKU_SwEng/figure43.png",
+    "images/SKKU_SwEng/figure42.png",
+    "{{site.url}}/images/SKKU_SwEng/figure40.png.md",
+    "{{site.url}}/images/SKKU_SwEng",
+    "{{site.url}}/images",
+    "{{site.url}}",
+    "_posts/SKKU_SwEng/2026-10-16-7DesignandImplementation.md",
+    "images/SKKU_SwEng/figure41.png",
+    "_posts/SKKU_SwEng/2026-10-17-6ArchitecturalDesign.md",
+    "_posts/SKKU_SwEng/2026-10-17-5SystemModeling.md",
+    "images/SKKU_SwEng/figure40.png",
+    "images/SKKU_SwEng/figure39.png",
+    "images/SKKU_SwEng/figure38.png",
+    "images/SKKU_SwEng/figure37.png",
+    "images/SKKU_SwEng/figure36.png",
+    "images/SKKU_SwEng/figure35.png",
+    "_posts/SKKU_SwEng/2026-10-16-4RequirementEngineering.md",
+    "_posts/SKKU_SwEng/무제.md",
+    "_posts/SKKU_SwEng/2026-10-16-2SoftwareProcess.md",
+    "_posts/SKKU_SwEng/2026-10-16-1Introduction.md",
+    "images/SKKU_SwEng/figure34.png",
+    "_posts/SKKU_SwEng/2026-10-16-3AgileSoftwareDevelopment.md",
     "_posts/SKKU_Network/2026-06-05-chatper3_final.md",
     "_posts/SKKU_Network/2026-06-06-chapter4.md",
     "_posts/papers/needs-reading.md",
-    "Pasted image 20261016161642.png",
-    "images/SKKU_SwEng/figure5.png",
-    "images/SKKU_SwEng/figure4.png",
-    "images/SKKU_SwEng/figure3.png",
-    "images/SKKU_SwEng/figure2.png",
     "_posts/InfoVis/2026-10-13-VIS1.md",
     "_posts/InfoVis/2026-10-13-VIS2.md",
-    "images/SKKU_SwEng/figure1.png",
     "images/SKKU_SwEng",
     "images/새 폴더",
     "_posts/InfoVis/2026-10-13-VIS6.md",
@@ -227,15 +235,7 @@
     "_posts/project/RAG/2026-09-30-RAG.md",
     "_posts/papers/sdfsdf 1.md",
     "_posts/papers/sdfsdf.md",
-    "_posts/papers/2026-09-21-realtime.md",
     "images/papers/ravla",
-    "images/papers/새 폴더",
-    "_posts/project/2026-09-22-기존방법정리.md",
-    "_posts/papers/2026-09-14-atvla.md",
-    "_posts/papers/2026-09-22-aloha.md",
-    "_posts/project/RAG",
-    "_posts/papers/2025-09-25-ReFT.md",
-    "images/urp",
-    "_posts/project"
+    "images/papers/새 폴더"
   ]
 }
