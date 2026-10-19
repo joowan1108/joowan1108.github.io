@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "_posts/SKKU_SwEng/2026-10-16-2SoftwareProcess.md",
+                "file": "_posts/papers/needs-reading.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-10-16-2SoftwareProcess"
+              "title": "needs-reading"
             }
           }
         ]
@@ -191,6 +191,7 @@
   },
   "active": "6556885c701c3d3b",
   "lastOpenFiles": [
+    "_posts/SKKU_SwEng/2026-10-16-2SoftwareProcess.md",
     "_posts/SKKU_SwEng/2026-10-16-1Introduction.md",
     "_posts/SKKU_SwEng/2026-10-17-5SystemModeling.md",
     "_posts/SKKU_SwEng/2026-10-17-6ArchitecturalDesign.md",
@@ -213,7 +214,6 @@
     "images/SKKU_SwEng/figure35.png",
     "_posts/SKKU_SwEng/2026-10-16-4RequirementEngineering.md",
     "_posts/SKKU_SwEng/무제.md",
-    "_posts/SKKU_SwEng/2026-10-16-2SoftwareProcess.md",
     "_posts/SKKU_Network/2026-06-05-chatper3_final.md",
     "_posts/SKKU_Network/2026-06-06-chapter4.md",
     "_posts/papers/needs-reading.md",

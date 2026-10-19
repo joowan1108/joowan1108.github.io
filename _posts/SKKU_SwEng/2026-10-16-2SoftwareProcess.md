@@ -191,9 +191,9 @@ Software에서 development와 maintenance을 분리하는 것은 점점 모호�
 Software에서 change는 cost을 유발하는데 이 cost을 최소화하는 것은 두 방법이 있다.
 
 - **Change Anticipation**
-	- 변경사항을 예측하고 구현
+	- 변경사항을 예측하고 구현 : Prototype
 - **Change Tolerance**
-	- 쉽게 수정될 수 있도록 설계
+	- 쉽게 수정될 수 있도록 설계 : Incremental Delivery
 
 Change에 유연해지도록 하는 두 방법
 
