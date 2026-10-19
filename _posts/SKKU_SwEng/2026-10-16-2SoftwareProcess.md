@@ -33,9 +33,9 @@ Pre condition으로 input specification이 정의된 것이 architectural design
 
 Software process으로는 두 종류가 있다.
 
-- In plan-driven processes
+- **In plan-driven processes**
 	- 모든게 먼저 계획되어 있어야 함
-- In agiles processes
+- **In agiles processes**
 	- 계획이 incremental, continual하게 된다.
 
 Large system은 이 두 process의 중간점을 가져야 한다.
@@ -57,7 +57,7 @@ Large system은 이 두 process의 중간점을 가져야 한다.
 
 최근 large system들은 모든 모델의 elements을 조금씩 사용함
 
-#### Waterfall Model
+## Waterfall Model
 
 Planning all of process activies before starting
 
@@ -116,7 +116,7 @@ Initial implementation을 한 다음, feedback을 받고, evolving하는 과정�
 - Delivery 빠르게 하기
 
 **단점**
-- 기존 소프트웨어에 맞는 요구사항을 타협해야 하기에 user의 실제 요규를 완벽하게 만족 못 할 수 있음
+- 기존 소프트웨어에 맞는 요구사항을 타협해야 하기에 user의 실제 요구를 완벽하게 만족 못 할 수 있음
 - Control over system evolution is lost : 사용한 reusable components을 조정할 수 없기에
 
 
@@ -134,24 +134,24 @@ Specification, development, validation, evolution
 Service의 requirements을 이해하고 정의하는 과정
 Contraints을 정의하는 과정
 
-- Requirements elicitation and analysis
+- **Requirements elicitation and analysis**
 	- Observation과 discussions을 통해 requirements을 알아내기
-- Requirements specification
+- **Requirements specification**
 	- 얻은 정보를 document으로 정리하기
-- Requirements validation
+- **Requirements validation**
 	- Requirements가 realism (실현 가능), consistency (모순적이지 않은지), completeness (빠짐없이 정의되어 있는지)을 만족하는지 확인
 
 ![joowan1108]({{site.url}}/images/SKKU_SwEng/figure4.png)
 
 ## 2. Software Development
 
-- Architectural Design
+- **Architectural Design**
 	- 전체 구조, 주요 components, relationships 정의
-- Database Design
+- **Database Design**
 	- Datastructure 정의
-- Interface Design
+- **Interface Design**
 	- System component 간 interface 정의
-- Compoenent Selection and Design
+- **Compoenent Selection and Design**
 	- Resuable component 찾지 및 새로운 components 정의
 
 ![joowan1108]({{site.url}}/images/SKKU_SwEng/figure5.png)
@@ -168,11 +168,11 @@ Requirements 확인보다 프로그램 testing에 더 큰 노력을 한다.
 
 Testing에는 여러 state가 존재한다.
 
-- Component Testing
+- **Component Testing**
 	- Testing individual components
-- System Testing
+- **System Testing**
 	- Entire system
-- Customer Testing
+- **Customer Testing**
 	- Test data 말고 실제 customer가 test
 
 **V-model**은 plan driven software process을 위한 testing model이다. 각 단계마다 미리 어떻게 test을 할 것인지 미리 정의한다. Link between testing and development activities
@@ -191,7 +191,7 @@ Software에서 change는 cost을 유발하는데 이 cost을 최소화하는 것
 
 Change에 유연해지도록 하는 두 방법
 
-- Prototyping
+- **Prototyping**
 	- Early version of software to demonstrate concepts
 	- 장점
 		- Potential users가 사용할 수 있게 해서 system이 자기 requirements을 만족하는지 보기 가능
@@ -209,7 +209,7 @@ Change에 유연해지도록 하는 두 방법
 
 
 
-- Incremental Delivery
+- **Incremental Delivery**
 	- 중간에 완성된 기능들을 보고하기
 	- 이때 각 increment가 실제 가치를 지녀야함
 	- 장점
