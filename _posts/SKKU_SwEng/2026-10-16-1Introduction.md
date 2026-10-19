@@ -117,6 +117,8 @@ Wide Responsibility, Honest, more than upholding the law
 > **ACM**: Association for Computing Machinery
    **IEEE**: Institute of Electrical and Electronics Engineers
 
+**이 organization에서 정의한 ethical principles**
+
 Ethical Principles에서 Colleagues, self가 중오
 
 - **Colleagues**: Fair and Supportive
