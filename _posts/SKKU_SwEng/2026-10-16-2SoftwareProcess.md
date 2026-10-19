@@ -158,7 +158,11 @@ Contraints을 정의하는 과정
 
 ![joowan1108]({{site.url}}/images/SKKU_SwEng/figure5.png)
 
-> Testing은 bug을 찾아내는거고 debugging은 bug가 어디있는지 찾고 수정하는 것
+**Implementation**
+
+Programming은 standard process 없이 하는 individual activity
+
+Testing은 bug을 찾아내는거고 debugging은 bug가 어디있는지 찾고 수정하는 것
 
 ## 3. Software Validation
 
