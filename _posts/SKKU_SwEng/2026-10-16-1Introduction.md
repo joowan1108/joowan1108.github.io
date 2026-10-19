@@ -28,13 +28,13 @@ use_math: true
 - Acceptability
 	- Understandable, usable, compatible
 
-**ISCE** (International Conference on Software Engineering)에서 정의하는 필요한 documents
+**ICSE** (International Conference on Software Engineering)에서 정의하는 필요한 documents
 - README: what the software does
 - REQUIREMENTS: environment information
 - LICENSE: distribution rights
 - INSTALL: Usage example / installation test
 
-Software 개발에 드는 cost는 develop보다 maintain하는데 오래 걸린다. Debugging만 해도 develope의 절반의 cost가 필요하다고 한다.
+Software 개발에 드는 cost는 develop보다 maintain하는데 오래 걸린다. Debugging만 해도 develop의 절반의 cost가 필요하다고 한다.
 
 **Software project들이 실패하는 이유** 
 
@@ -64,7 +64,7 @@ Software Engineering이 중요한 이유
 1. Dependency of Software: Software System에 더 의존하게 된다. 
 2. Cost saving: 길게 보면 cost saving. 대부분의 cost는 사용하기 시작한 다음에 software가 바뀔 때 생긴다
 
-Software Engineering의 key challenge: Diversity가 증가하더라도 demnads for reduced deliveryt imes and developing trustworthy software
+Software Engineering의 key challenge: Diversity가 증가하더라도 demands for reduced delivery times and developing trustworthy software
 
 # Software Process Activities
 
@@ -106,6 +106,7 @@ Wide Responsibility, Honest, more than upholding the law
 - Confidentiality
 - Competence
 	- Should not misrepresent level of competence
+	- 능력 과장 x / 능력 부족하면 일 맡기 x
 - Intellectual property rights
 	- local laws, intellectual property
 - Computer misuse
