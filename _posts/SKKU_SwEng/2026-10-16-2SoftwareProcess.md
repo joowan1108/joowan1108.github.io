@@ -145,6 +145,8 @@ Contraints을 정의하는 과정
 
 ## 2. Software Development
 
+**Software design activities**
+
 - **Architectural Design**
 	- 전체 구조, 주요 components, relationships 정의
 - **Database Design**
@@ -152,7 +154,7 @@ Contraints을 정의하는 과정
 - **Interface Design**
 	- System component 간 interface 정의
 - **Compoenent Selection and Design**
-	- Resuable component 찾지 및 새로운 components 정의
+	- Resuable component 찾기 및 새로운 components 정의
 
 ![joowan1108]({{site.url}}/images/SKKU_SwEng/figure5.png)
 
@@ -184,9 +186,9 @@ Software에서 development와 maintenance을 분리하는 것은 점점 모호�
 
 Software에서 change는 cost을 유발하는데 이 cost을 최소화하는 것은 두 방법이 있다.
 
-- Change Anticipation
+- **Change Anticipation**
 	- 변경사항을 예측하고 구현
-- Change Tolerance
+- **Change Tolerance**
 	- 쉽게 수정될 수 있도록 설계
 
 Change에 유연해지도록 하는 두 방법
@@ -223,5 +225,7 @@ Change에 유연해지도록 하는 두 방법
 
 
 > Process Improvement: 기존 process을 바꿔서 효율을 높이는 것
+> 
 > 방법 1: Process maturity approach : Process와 project management 향상
+> 
 > 방법 2: Agile Approach : 반복적인 development와 개발 overhead 줄이기
